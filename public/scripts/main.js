@@ -1,22 +1,33 @@
-window.onload = function() {
+class ChatClass{
+  constructor() {
+    // データベースの参照を準備
+    var firebaseRef = new Firebase("https://chattool-5a67b.firebaseio.com/");
+    this.messagesRef = firebaseRef.child('messages');
 
-// データベースの参照を準備
-  var firebaseRef = new Firebase("https://chattool-5a67b.firebaseio.com/"); // ... 1
-  var messagesRef = firebaseRef.child('messages'); // ... 2
+    this.send_message = document.getElementById('sendMessage');
+    this.send_message.addEventListener('click', this.saveMessage.bind(this));
 
-// 既存メッセージを表示
-  messagesRef.on('child_added', function(snapshot) { // ... 3
-    var msg = snapshot.val();
+    this.messagesRef.on('child_added', this.loadMessages.bind(this));
+
+  }
+
+  //  メッセージを表示
+  loadMessages(data) {
+    var msg = data.val();
     $('<li>').text(msg.name + ': ' + msg.body).prependTo('#messages');
-  });
+  }
 
-  $('#sendMessage').click(function() {
-    // 新規メッセージを投稿
-    messagesRef.push({ // ... 4
+  // メッセージを投稿
+  saveMessage() {
+    this.messagesRef.push({
       name: 'test',
       body: $('#message').val()
     });
-  });
+  }
+}
+
+window.onload = function() {
+  window.ChatTool = new ChatClass();
 };
 
 
