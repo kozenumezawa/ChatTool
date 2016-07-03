@@ -11,6 +11,8 @@
 
   <title>Chat Tool</title>
 
+  <link href="styles/main.css" rel="stylesheet">
+
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!--[if lt IE 9]>
@@ -51,6 +53,7 @@
   </div>
 </nav>
 
+
 <div class="container-fluid">
   <div class="row">
     <!--画面左（コンタクトリスト）-->
@@ -60,14 +63,18 @@
 
     <!--画面右（チャット画面）-->
     <div class="col-xs-8" style="background:#EEE;height:300px;">
-      <input id="name" placeholder="名前" />
-      <input id="message" placeholder="メッセージ" />
-      <button id="send">投稿</button>
-
-      <!--チャット画面-->
-      <ul id="messages"></ul>
-
-
+      <div id="messages">
+        <span id="message-filler"></span>
+      </div>
+      <form id="message-form" action="#">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="message">
+          <label class="mdl-textfield__label" for="message">Message...</label>
+        </div>
+        <button id="sendMessage" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+          投稿
+        </button>
+      </form>
     </div>
   </div>
 </div>
