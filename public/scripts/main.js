@@ -1,8 +1,18 @@
 class ChatClass{
   constructor() {
+
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyB4OQXeOmidR-oKw7XlYMjtNV2TxU-Ects",
+      authDomain: "chattool-5a67b.firebaseapp.com",
+      databaseURL: "https://chattool-5a67b.firebaseio.com",
+      storageBucket: "chattool-5a67b.appspot.com",
+    };
+    firebase.initializeApp(config);
+
     // データベースの参照を準備
-    this.firebaseRef = new Firebase("https://chattool-5a67b.firebaseio.com/");
-    this.messagesRef = this.firebaseRef.child('messages');
+    this.rootRef = firebase.database().ref();
+    this.messagesRef = this.rootRef.child('messages');
 
     this.send_message = document.getElementById('sendMessage');
     this.login_button = document.getElementById('loginButton');
@@ -11,48 +21,29 @@ class ChatClass{
     this.send_message.addEventListener('click', this.saveMessage.bind(this));
     this.login_button.addEventListener('click', this.loginByGoogle.bind(this));
 
+    this.initFirebase();
+
     this.loadMessages();
 
-    this.initFirebase();
+
   }
 
   initFirebase() {
     this.auth = firebase.auth();
     this.database = firebase.database();
     this.storage = firebase.storage();
-    this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
   }
 
-  //  ログイン、ログアウト時の処理
-  onAuthStateChanged(user) {
-    if(user) {
-      //  ログイン時
-      let userName = user.displayName;
-      // this.loadMessages();
-    } else {
-      //ログアウト時
-    }
-  }
 
   //  googleアカウントでログイン
   loginByGoogle(googleUser) {
     $('#loginModal').modal('hide');
-    let provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-
+    var auth = firebase.auth();
+    var provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).then(function(result) {
+      //  ログイン成功
     }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
+      //  ログイン失敗
     });
   }
 
@@ -66,12 +57,15 @@ class ChatClass{
      this.messagesRef.limitToLast(12).on('child_added', setMessage);
   }
 
+
   //  メッセージを投稿
   saveMessage() {
     let currentUser = this.auth.currentUser;
     this.messagesRef.push({
       name: currentUser.displayName,
       body: $('#message').val()
+    },function (error) {
+      console.log(error);
     });
   }
 }
