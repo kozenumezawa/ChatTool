@@ -24,8 +24,6 @@ class ChatClass{
     this.initFirebase();
 
     this.loadMessages();
-
-
   }
 
   initFirebase() {

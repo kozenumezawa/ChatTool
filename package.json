@@ -1,13 +1,10 @@
 {
-  "name": "chat-tool",
+  "name": "chattool",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack -w",
-    "lite": "lite-server --verbose --open dist",
-    "start": "concurrent \"npm run webpack\" \"npm run lite\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -19,22 +16,16 @@
     "url": "https://github.com/kozenumezawa/ChatTool/issues"
   },
   "homepage": "https://github.com/kozenumezawa/ChatTool#readme",
+  "dependencies": {
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0"
+  },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
+    "babel": "^6.5.2",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
-    "concurrently": "^2.1.0",
-    "lite-server": "^2.2.2",
-    "react": "^15.2.0",
     "webpack": "^1.13.1"
-  },
-  "dependencies": {
-    "firebase": "^3.1.0",
-    "marked": "^0.3.5",
-    "react": "^15.2.0",
-    "react-dom": "^15.2.0",
-    "superagent": "^2.0.0"
   }
 }

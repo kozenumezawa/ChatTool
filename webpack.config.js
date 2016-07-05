@@ -1,22 +1,24 @@
+const path = require('path');
+
 module.exports = {
-  entry: __dirname + "/src/app.js",
+  entry: {
+    bundle: './src/main.js'
+  },
   output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'public/dist'),
+    filename: '[name].js'
   },
   module: {
     loaders: [
       {
-        test: /\.js[x]?$/,
+        loader: 'babel',
         exclude: /node_modules/,
-        loader: "babel",
-        query:{
+        test: /\.js[x]?$/,
+        query: {
+          cacheDirectory: true,
           presets: ['react', 'es2015']
         }
       }
     ]
-  },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
   }
 };
