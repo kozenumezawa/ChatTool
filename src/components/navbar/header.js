@@ -5,6 +5,7 @@ import { Nav } from 'react-bootstrap'
 import { NavDropdown } from 'react-bootstrap'
 import { MenuItem } from 'react-bootstrap'
 import { NavItem } from 'react-bootstrap'
+
 import LoginModal from './login-modal'
 
 export default class header extends React.Component {
@@ -42,20 +43,23 @@ export default class header extends React.Component {
             <Navbar.Brand>
               <a href="#">Chat Tool</a>
             </Navbar.Brand>
+            <Navbar.Toggle />
           </Navbar.Header>
 
-          <Nav>
-            <NavItem eventKey={1} href="#" onSelect={this.openLoginModal} > ログイン</NavItem>
-            <NavItem eventKey={2} href="#"> 新規登録</NavItem>
-          </Nav>
+          <Navbar.Collapse>
+            <Nav>
+              <NavItem eventKey={1} href="#" onSelect={this.openLoginModal} > ログイン</NavItem>
+              <NavItem eventKey={2} href="#"> 新規登録</NavItem>
+            </Nav>
 
-          <Nav pullRight>
-            <NavDropdown eventKey={5} title="連絡先を追加" >
-              <MenuItem eventKey={5.1}>IDで追加</MenuItem>
-              <MenuItem divider />
-              <MenuItem eventKey={5.2}>メールアドレスで追加</MenuItem>
-            </NavDropdown>
-          </Nav>
+            <Nav pullRight>
+              <NavDropdown eventKey={5} title="連絡先を追加" >
+                <MenuItem eventKey={5.1}>IDで追加</MenuItem>
+                <MenuItem divider />
+                <MenuItem eventKey={5.2}>メールアドレスで追加</MenuItem>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
         </Navbar>
       </div>
     );
