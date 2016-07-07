@@ -24,14 +24,15 @@ export default class login extends React.Component {
       <div>
         <Modal show={this.props.showData.showModal} onHide={this._close}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Member</Modal.Title>
+            <Modal.Title>Chat Toolにログイン</Modal.Title>
           </Modal.Header>
+
           <Modal.Body>
             <MemberForm />
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="primary" onClick={this._close}>Save</Button>
-            <Button onClick={this._close}>Cancel</Button>
+            <Button bsStyle="primary" onClick={this._close}>ログイン</Button>
+            <Button onClick={this._close}>キャンセル</Button>
           </Modal.Footer>
         </Modal>
       </div>
