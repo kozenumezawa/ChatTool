@@ -8,27 +8,21 @@ import MemberForm from '../memberform'
 export default class login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showModal: false
-    };
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
+    propTypes : {
+      showModal : React.PropTypes.bool
+    }
+    this._close = this._close.bind(this);
   }
 
-  close() {
-    this.setState({ showModal: false});
-  }
-
-  open() {
-    this.setState({ showModal: true});
+  //  親へモーダルダイアログを閉じる処理を通知
+  _close() {
+    this.props.showData._handleCloseLoginModal();
   }
 
   render() {
     return (
       <div>
-        <Button onClick={this.open}>Add</Button>
-
-        <Modal show={this.state.showModal} onHide={this.close}>
+        <Modal show={this.props.showData.showModal} onHide={this._close}>
           <Modal.Header closeButton>
             <Modal.Title>Add Member</Modal.Title>
           </Modal.Header>
@@ -36,8 +30,8 @@ export default class login extends React.Component {
             <MemberForm />
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="primary" onClick={this.close}>Save</Button>
-            <Button onClick={this.close}>Cancel</Button>
+            <Button bsStyle="primary" onClick={this._close}>Save</Button>
+            <Button onClick={this._close}>Cancel</Button>
           </Modal.Footer>
         </Modal>
       </div>
