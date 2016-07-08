@@ -10,6 +10,8 @@ import { Tab } from 'react-bootstrap'
 import Header from './navbar/header'
 import SideMenu from './navbar/sidemenu'
 import Members from './members'
+import Messages from './chat-messages'
+
 
 export default class main extends React.Component {
   constructor(props) {
@@ -66,13 +68,14 @@ export default class main extends React.Component {
       <div className="wrap">
         <Header accountInfo =
                   {{_loginByGoogle : this._loginByGoogle}} />
-
+        
         <Grid>
           <Row>
             <Col md={3}>
               <SideMenu />
             </Col>
             <Col md={9}>
+              <Messages />
               <Tabs defaultActiveKey={1}>
                 <Tab eventKey={1} title="Start">
                   <Members />
