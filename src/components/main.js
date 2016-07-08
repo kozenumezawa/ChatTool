@@ -4,13 +4,10 @@ import firebase from 'firebase'
 import { Grid } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import { Col } from 'react-bootstrap'
-import { Tabs } from 'react-bootstrap'
-import { Tab } from 'react-bootstrap'
 
 import Header from './navbar/header'
 import SideMenu from './navbar/sidemenu'
-import Members from './members'
-import Messages from './chat-messages'
+import ChatMessages from'./chat-messages'
 
 import Action from '../Action'
 import Store from '../Store'
@@ -77,17 +74,17 @@ export default class main extends React.Component {
 
   render() {
     return (
-      <div className="wrap">
+      <div>
         <Header parent_state ={{ action : action,
                                 showModal : this.state.showModal,
                                 loginByGoogle : this._loginByGoogle}} />
-        
         <Grid>
           <Row>
             <Col md={3}>
               <SideMenu />
             </Col>
             <Col md={9}>
+              <ChatMessages />
             </Col>
           </Row>
         </Grid>

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --content-base public/"
+    "start": "webpack-dev-server --inline --content-base public/"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,7 @@
     "firebase": "^3.1.0",
     "react": "^15.2.0",
     "react-bootstrap": "^0.29.5",
-    "react-dom": "^15.2.0",
-    "webpack-dev-server": "^1.14.1"
+    "react-dom": "^15.2.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",
