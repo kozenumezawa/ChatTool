@@ -17,6 +17,7 @@ export default class header extends React.Component {
     this.openLoginModal = this.openLoginModal.bind(this);
     this.closeLoginModal = this.closeLoginModal.bind(this);
     this._handleCloseLoginModal = this._handleCloseLoginModal.bind(this);
+    this._loginByGoogle = this._loginByGoogle.bind(this);
   }
 
   openLoginModal() {
@@ -32,12 +33,18 @@ export default class header extends React.Component {
     this.closeLoginModal();
   }
 
+  //  親へGoogleアカウントでログインが押されたことを通知
+  _loginByGoogle() {
+    this.props.accountInfo._loginByGoogle();
+  }
+
   render() {
     return (
       <div>
         <LoginModal showData =
                       {{showModal : this.state.showModal,
-                        _handleCloseLoginModal : this._handleCloseLoginModal}} />
+                        _handleCloseLoginModal : this._handleCloseLoginModal,
+                        _loginByGoogle: this._loginByGoogle}} />
         <Navbar>
           <Navbar.Header>
             <Navbar.Brand>

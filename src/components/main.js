@@ -40,6 +40,8 @@ export default class main extends React.Component {
     // this.loadMessages();
 
     this.initFirebase();
+
+    this._loginByGoogle = this._loginByGoogle.bind(this);
   }
 
   initFirebase() {
@@ -48,10 +50,22 @@ export default class main extends React.Component {
     this.storage = firebase.storage();
   }
 
+  //  子からのイベントに反応してGoogleアカウントでログイン
+  _loginByGoogle() {
+    var auth = firebase.auth();
+    var provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).then(function(result) {
+      //  ログイン成功
+    }).catch(function(error) {
+      //  ログイン失敗
+    });
+  }
+
   render() {
     return (
       <div className="wrap">
-        <Header />
+        <Header accountInfo =
+                  {{_loginByGoogle : this._loginByGoogle}} />
 
         <Grid>
           <Row>

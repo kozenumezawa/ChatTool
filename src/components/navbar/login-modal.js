@@ -12,11 +12,18 @@ export default class login extends React.Component {
       showModal : React.PropTypes.bool
     }
     this._close = this._close.bind(this);
+    this._loginByGoogle = this._loginByGoogle.bind(this);
   }
 
   //  親へモーダルダイアログを閉じる処理を通知
   _close() {
     this.props.showData._handleCloseLoginModal();
+  }
+
+  //  親へGoogleアカウントでログインが押されたことを通知
+  _loginByGoogle() {
+    this.props.showData._loginByGoogle();
+    this._close();
   }
 
   render() {
@@ -31,7 +38,7 @@ export default class login extends React.Component {
             <MemberForm />
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="primary" onClick={this._close}>ログイン</Button>
+            <Button bsStyle="primary" onClick={this._loginByGoogle}>ログイン</Button>
             <Button onClick={this._close}>キャンセル</Button>
           </Modal.Footer>
         </Modal>
