@@ -11,40 +11,24 @@ import LoginModal from './login-modal'
 export default class header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showModal: false
-    };
-    this.openLoginModal = this.openLoginModal.bind(this);
-    this.closeLoginModal = this.closeLoginModal.bind(this);
-    this._handleCloseLoginModal = this._handleCloseLoginModal.bind(this);
+    this._openLoginModal = this._openLoginModal.bind(this);
     this._loginByGoogle = this._loginByGoogle.bind(this);
   }
 
-  openLoginModal() {
-    this.setState({ showModal: true});
-  }
-
-  closeLoginModal() {
-    this.setState({ showModal: false});
-  }
-
-  // 子からの通知を受け取り、モーダルダイアログを閉じる
-  _handleCloseLoginModal() {
-    this.closeLoginModal();
+  //  ログインが押されたときの処理
+  _openLoginModal() {
+    this.props.parent_state.action.showLoginModal();
   }
 
   //  親へGoogleアカウントでログインが押されたことを通知
   _loginByGoogle() {
-    this.props.accountInfo._loginByGoogle();
+    this.props.parent_state.action.loginByGoogle();
   }
 
   render() {
     return (
       <div>
-        <LoginModal showData =
-                      {{showModal : this.state.showModal,
-                        _handleCloseLoginModal : this._handleCloseLoginModal,
-                        _loginByGoogle: this._loginByGoogle}} />
+        <LoginModal parent_state = { this.props.parent_state } />
         <Navbar>
           <Navbar.Header>
             <Navbar.Brand>
@@ -55,7 +39,7 @@ export default class header extends React.Component {
 
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} href="#" onSelect={this.openLoginModal} > ログイン</NavItem>
+              <NavItem eventKey={1} href="#" onSelect={this._openLoginModal} > Googleアカウントでログイン</NavItem>
               <NavItem eventKey={2} href="#"> 新規登録</NavItem>
             </Nav>
 

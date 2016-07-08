@@ -1,5 +1,5 @@
 import React from 'react'
-import Firebase from 'firebase'
+import firebase from 'firebase'
 
 import { Grid } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
@@ -12,6 +12,13 @@ import SideMenu from './navbar/sidemenu'
 import Members from './members'
 import Messages from './chat-messages'
 
+import Action from '../Action'
+import Store from '../Store'
+import EventEmitter from '../EventEmitter'
+
+var dispatcher = new EventEmitter();
+var action = new Action(dispatcher);
+var store = new Store(dispatcher);
 
 export default class main extends React.Component {
   constructor(props) {
@@ -37,23 +44,28 @@ export default class main extends React.Component {
     // this.send_message.addEventListener('click', this.saveMessage.bind(this));
     // this.login_button.addEventListener('click', this.loginByGoogle.bind(this));
 
-    // this.initFirebase();
-
     // this.loadMessages();
 
     this.initFirebase();
 
-    this._loginByGoogle = this._loginByGoogle.bind(this);
+    this.state = {
+      showModal: store.getLoginModalData()
+    };
+
+    store.on('LOGIN_MODAL_CHANGE', () => {
+      this.setState({showModal: store.getLoginModalData()})
+    });
+
+    store.on('LOGIN_BY_GOOGLE', this.loginByGoogle);
   }
 
   initFirebase() {
-    this.auth = firebase.auth();
     this.database = firebase.database();
     this.storage = firebase.storage();
   }
 
-  //  子からのイベントに反応してGoogleアカウントでログイン
-  _loginByGoogle() {
+  //  Googleアカウントでログイン
+  loginByGoogle() {
     var auth = firebase.auth();
     var provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider).then(function(result) {
@@ -66,8 +78,9 @@ export default class main extends React.Component {
   render() {
     return (
       <div className="wrap">
-        <Header accountInfo =
-                  {{_loginByGoogle : this._loginByGoogle}} />
+        <Header parent_state ={{ action : action,
+                                showModal : this.state.showModal,
+                                loginByGoogle : this._loginByGoogle}} />
         
         <Grid>
           <Row>
@@ -75,14 +88,6 @@ export default class main extends React.Component {
               <SideMenu />
             </Col>
             <Col md={9}>
-              <Messages />
-              <Tabs defaultActiveKey={1}>
-                <Tab eventKey={1} title="Start">
-                  <Members />
-                </Tab>
-                <Tab eventKey={2} title="Sub"></Tab>
-                <Tab eventKey={3} title="Other"></Tab>
-              </Tabs>
             </Col>
           </Row>
         </Grid>
@@ -90,3 +95,4 @@ export default class main extends React.Component {
     );
   }
 }
+

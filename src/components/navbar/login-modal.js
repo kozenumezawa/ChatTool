@@ -15,27 +15,26 @@ export default class login extends React.Component {
     this._loginByGoogle = this._loginByGoogle.bind(this);
   }
 
-  //  親へモーダルダイアログを閉じる処理を通知
+  //  モーダルダイアログを閉じる処理
   _close() {
-    this.props.showData._handleCloseLoginModal();
+    this.props.parent_state.action.closeLoginModal();
   }
 
   //  親へGoogleアカウントでログインが押されたことを通知
   _loginByGoogle() {
-    this.props.showData._loginByGoogle();
-    this._close();
+    this.props.parent_state.action.loginByGoogle();
   }
 
   render() {
     return (
       <div>
-        <Modal show={this.props.showData.showModal} onHide={this._close}>
+        <Modal show={this.props.parent_state.showModal} onHide={this._close}>
           <Modal.Header closeButton>
             <Modal.Title>Chat Toolにログイン</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <MemberForm />
+
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="primary" onClick={this._loginByGoogle}>ログイン</Button>
