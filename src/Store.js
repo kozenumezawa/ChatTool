@@ -20,7 +20,6 @@ export default class Store extends Emitter {
 
     //  データベースの参照開始
     this.commentsRef = firebase.database().ref('messages');
-    this.commentsRef.on('child_added', this.loadMessages.bind(this));
 
     //  各stateの初期値設定f
     this.show_login_modal = false;
@@ -52,8 +51,10 @@ export default class Store extends Emitter {
   changeLoggedinState(user) {
     if (user) {
       // User is signed in.
+      this.commentsRef.on('child_added', this.loadMessages.bind(this));
       this.user_loggedin = true;
     } else {
+      this.commentsRef.off('child_added', this.loadMessages.bind(this));
       this.user_loggedin = false;
     }
     this.emit('CHANGE_LOGGEDIN_STATE')
@@ -108,7 +109,15 @@ export default class Store extends Emitter {
     this.emit('SIGN_UP_MODAL_CHANGE')
   }
 
-  signUpByMail() {
+  signUpByMail(userdata) {
+    firebase.auth().createUserWithEmailAndPassword(userdata.mail, userdata.password_value).catch((error) => {
+      // エラー処理
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log('can not sign in')
+      console.log(errorCode);
+      console.log(errorMessage);
+    });
     this.closeSignUpModal();
   }
 

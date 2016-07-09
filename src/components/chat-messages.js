@@ -8,14 +8,23 @@ export default class memberform extends React.Component {
     super(props)
   }
 
+  //  ログイン中かどうかでrender()の内容を変える
   render() {
-    return (
-      <div>
-        <div className="scroll-chat-field">
-            <Message parent_state = { this.props.parent_state } />
+    if(this.props.parent_state.logged_in == true) {
+      //  ログイン中の処理
+      return (
+        <div>
+          <div className="scroll-chat-field">
+            <Message parent_state={ this.props.parent_state }/>
+          </div>
+          <MessageForm parent_state={ this.props.parent_state }/>
         </div>
-        <MessageForm parent_state = { this.props.parent_state } />
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+        </div>
+      );
+    }
   }
 }

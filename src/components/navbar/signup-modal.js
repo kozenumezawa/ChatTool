@@ -11,12 +11,16 @@ export default class signup extends React.Component {
     super(props);
 
     this.state = {
+      name : '',
+      mail : '',
       password_value : ''
     };
 
     this._close = this._close.bind(this);
     this._signUpByMail = this._signUpByMail.bind(this);
     this.getPasswordState = this.getPasswordState.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleMailChange = this.handleMailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
@@ -27,8 +31,7 @@ export default class signup extends React.Component {
 
   //  登録ボタンが押されたときの処理
   _signUpByMail() {
-
-    this.props.parent_state.action.signUpByMail();
+    this.props.parent_state.action.signUpByMail(this.state);
   }
 
   getPasswordState() {
@@ -40,6 +43,14 @@ export default class signup extends React.Component {
         return 'error';
       }
     }
+  }
+
+  handleNameChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  handleMailChange(event) {
+    this.setState({ mail: event.target.value });
   }
 
   handlePasswordChange(event) {
@@ -58,11 +69,11 @@ export default class signup extends React.Component {
           <Modal.Body>
             <FormGroup controlId="formControlsText">
               <ControlLabel>ユーザー名</ControlLabel>
-              <FormControl type="text" placeholder="" />
+              <FormControl type="text" placeholder="" onChange={this.handleNameChange}/>
             </FormGroup>
             <FormGroup controlId="formControlsEmail">
               <ControlLabel>メールアドレス</ControlLabel>
-              <FormControl type="email" placeholder="" />
+              <FormControl type="email" placeholder="" onChange={this.handleMailChange}/>
             </FormGroup>
             <FormGroup controlId="formControlsPassword" validationState={this.getPasswordState()}>
               <ControlLabel>パスワード (半角英数 4文字以上 16文字以下)</ControlLabel>

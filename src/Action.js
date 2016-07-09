@@ -27,8 +27,8 @@ export default class Action {
     this.dispatcher.emit('closeSignUpModal')
   }
 
-  signUpByMail() {
-    this.dispatcher.emit('signUpByMail')
+  signUpByMail(userdata) {
+    this.dispatcher.emit('signUpByMail',userdata)
   }
   //  ---SignUp モーダル関係終わり---
 

@@ -1,36 +1,6 @@
 {
   "rules": {
     ".read": "auth!=null",
-    ".write": "auth!=null",
-
-    "rooms": {
-      ".read": "auth !== null",
-      ".write": "auth !== null"
-    },
-
-    "users": {
-      ".read": "auth !== null",
-      ".write": "auth !== null",
-
-      "$user_id": {
-        ".write": "auth.uid === $user_id",
-
-        "rooms": {
-          ".read": "auth.uid === $user_id"
-        }
-      }
-    },
-    "messages": {
-      //ログインしているユーザだけがアクセスできる
-      ".read": "auth !== null",
-      ".weite": "auth !== null",
-
-      "$room_id": { //ルーム毎のアクセシビリティ
-        //参加権限を持つルームだけ読み書きができる
-        ".read": "root.child('users/'+ auth.uid +'/rooms/'+$room_id).exists()",
-        ".write": "root.child('users/'+ auth.uid +'/rooms/'+$room_id).exists()"
-      }
-    }
-
+    ".write": "auth!=null"
   }
 }
