@@ -30,7 +30,9 @@ export default class login extends React.Component {
           </Modal.Header>
 
           <Modal.Body>
+            <form>
 
+            </form>
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="primary" onClick={this._loginByGoogle}>ログイン</Button>

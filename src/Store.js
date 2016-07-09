@@ -26,6 +26,17 @@ export default class Store extends Emitter {
     this.show_login_modal = false;
     this.show_sign_up_modal = false;
 
+    //  ログイン状況を監視する関数をセット
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        console.log('siggned in');
+      } else {
+        console.log('siddned out')
+        // No user is signed in.
+      }
+    });
+
     dispatcher.on('showLoginModal', this.showLoginModal.bind(this));
     dispatcher.on('closeLoginModal', this.closeLoginModal.bind(this));
     dispatcher.on('loginByGoogle', this.loginByGoogle.bind(this));

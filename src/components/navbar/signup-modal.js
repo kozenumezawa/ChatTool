@@ -2,13 +2,22 @@ import React from 'react'
 
 import { Button } from 'react-bootstrap'
 import { Modal } from 'react-bootstrap'
+import { FormGroup } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
+import { ControlLabel } from 'react-bootstrap'
 
 export default class signup extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      password_value : ''
+    };
+
     this._close = this._close.bind(this);
     this._signUpByMail = this._signUpByMail.bind(this);
+    this.getPasswordState = this.getPasswordState.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
   //  モーダルダイアログを閉じる処理
@@ -18,8 +27,25 @@ export default class signup extends React.Component {
 
   //  登録ボタンが押されたときの処理
   _signUpByMail() {
+
     this.props.parent_state.action.signUpByMail();
   }
+
+  getPasswordState() {
+    if(this.state.password_value != '') {
+      const pattern = new RegExp(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{4,16}$/, 'i');
+      if(pattern.test(this.state.password_value)) {
+        return 'success';
+      } else {
+        return 'error';
+      }
+    }
+  }
+
+  handlePasswordChange(event) {
+    this.setState({ password_value: event.target.value });
+  }
+
 
   render() {
     return (
@@ -30,7 +56,19 @@ export default class signup extends React.Component {
           </Modal.Header>
 
           <Modal.Body>
-
+            <FormGroup controlId="formControlsText">
+              <ControlLabel>ユーザー名</ControlLabel>
+              <FormControl type="text" placeholder="" />
+            </FormGroup>
+            <FormGroup controlId="formControlsEmail">
+              <ControlLabel>メールアドレス</ControlLabel>
+              <FormControl type="email" placeholder="" />
+            </FormGroup>
+            <FormGroup controlId="formControlsPassword" validationState={this.getPasswordState()}>
+              <ControlLabel>パスワード (半角英数 4文字以上 16文字以下)</ControlLabel>
+              <FormControl type="password" onChange={this.handlePasswordChange}/>
+              <FormControl.Feedback />
+            </FormGroup>
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="primary" onClick={this._signUpByMail}>ログイン</Button>
