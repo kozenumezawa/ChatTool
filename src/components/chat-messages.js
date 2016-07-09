@@ -1,6 +1,7 @@
 import React from 'react'
 
-import Textcontainer from './chat/textcontainer'
+import MessageForm from './chat/MessageForm'
+import Message from './chat/message'
 
 export default class memberform extends React.Component {
   constructor(props) {
@@ -11,59 +12,9 @@ export default class memberform extends React.Component {
     return (
       <div>
         <div className="scroll-chat-field">
-          <div className="mdl-card__supporting-text mdl-color-text--grey-600">
-            <div id="messages">
-              <span id="message-filler"></span>
-              <div className="chat-area">
-                <div className="chat-hukidashi">
-                  ふきだしなのですーふきだしですーふきだー
-                </div>
-              </div>
-            </div>
-
-            <div className="chat-box">
-              <div className="chat-area">
-                <div className="chat-hukidashi someone">
-                  ふきだしだよ
-                </div>
-              </div>
-            </div>
-
-            <div className="chat-box">
-              <div className="chat-area">
-                <div className="chat-hukidashi someone">
-                  ふきだしだよ
-                </div>
-              </div>
-            </div>
-
-            <div className="chat-box">
-              <div className="chat-area">
-                <div className="chat-hukidashi someone">
-                  ふきだしだよ
-                </div>
-              </div>
-            </div>
-
-            <div className="chat-box">
-              <div className="chat-area">
-                <div className="chat-hukidashi someone">
-                  ふきだしだよ
-                </div>
-              </div>
-            </div>
-
-            <div className="chat-box">
-              <div className="chat-area">
-                <div className="chat-hukidashi someone">
-                  ふきだしだよ
-                </div>
-              </div>
-            </div>
-            
-          </div>
+            <Message parent_state = { this.props.parent_state } />
         </div>
-        <Textcontainer />
+        <MessageForm parent_state = { this.props.parent_state } />
       </div>
     );
   }

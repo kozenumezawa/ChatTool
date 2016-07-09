@@ -4,7 +4,7 @@ import { FormGroup } from 'react-bootstrap'
 import { FormControl } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 
-export default class textform extends React.Component {
+export default class MessageForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -20,10 +20,16 @@ export default class textform extends React.Component {
     this.setState({ textAreaValue: event.target.value});
   }
 
+  //  親へGoogleアカウントでログインが押されたことを通知
+  _loginByGoogle() {
+    this.props.parent_state.action.loginByGoogle();
+  }
+  
+  //  送信ボタンが押されたときの処理
   onClick() {
     // this.setState({ textAreaValue: this.refs.textArea.getDOMNode().value });
     if(this.state.textAreaValue != "") {
-      console.log(this.state.textAreaValue);
+      this.props.parent_state.action.sendMessage(this.state.textAreaValue);
       this.setState({ textAreaValue: ""})
     }
   }

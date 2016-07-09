@@ -17,26 +17,18 @@ export default class Store extends Emitter {
 
     // データベースの参照を準備
     this.rootRef = firebase.database().ref();
-    this.messagesRef = this.rootRef.child('messages');
-
-    // this.send_message = document.getElementById('sendMessage');
-    // this.login_button = document.getElementById('loginButton');
-
-
-    // this.send_message.addEventListener('click', this.saveMessage.bind(this));
-    // this.login_button.addEventListener('click', this.loginByGoogle.bind(this));
-
-    // this.loadMessages();
-
     this.initFirebase();
 
+    //  データベースの参照開始
+    this.commentsRef = firebase.database().ref('messages');
+    this.commentsRef.on('child_added', this.loadMessages.bind(this));
 
-
-    this.count = 0;
     this.showModal = false;
+
     dispatcher.on('showLoginModal', this.showLoginModal.bind(this));
     dispatcher.on('closeLoginModal', this.closeLoginModal.bind(this));
     dispatcher.on('loginByGoogle', this.loginByGoogle.bind(this));
+    dispatcher.on('sendMessage', this.sendMessage.bind(this));
   }
 
   initFirebase() {
@@ -44,6 +36,10 @@ export default class Store extends Emitter {
     this.storage = firebase.storage();
   }
 
+  //  全メッセージの読み込みと、新規メッセージの読み込み
+  loadMessages(data) {
+    this.emit('UPDATE_MESSAGE', data.val())
+  }
 
   showLoginModal() {
     this.showModal = true;
@@ -63,12 +59,22 @@ export default class Store extends Emitter {
   loginByGoogle() {
     var auth = firebase.auth();
     var provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).then(function(result) {
+    auth.signInWithPopup(provider).then((result) => {
       //  ログイン成功
+      this.emit('LOGIN_BY_GOOGLE');
+      this.closeLoginModal();
+      console.log(firebase.auth().currentUser);
+
     }).catch(function(error) {
       //  ログイン失敗
     });
+  }
 
-    this.emit('LOGIN_BY_GOOGLE');
+  sendMessage(message) {
+    const postData = {
+      name: firebase.auth().currentUser.displayName,
+      body: message
+    }
+    firebase.database().ref('messages').push(postData);
   }
 }

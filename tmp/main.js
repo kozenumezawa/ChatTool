@@ -51,7 +51,7 @@ class ChatClass{
       var msg = data.val();
       $('<li>').text(msg.name + ': ' + msg.body).prependTo('#messages');
     }.bind(this);
-
+  
      this.messagesRef.limitToLast(12).on('child_added', setMessage);
   }
 

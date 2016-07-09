@@ -14,4 +14,8 @@ export default class Action {
   loginByGoogle() {
     this.dispatcher.emit('loginByGoogle');
   }
+
+  sendMessage(message) {
+    this.dispatcher.emit('sendMessage', message)
+  }
 }

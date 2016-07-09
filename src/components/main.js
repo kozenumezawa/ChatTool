@@ -22,7 +22,8 @@ export default class main extends React.Component {
 
     this.state = {
       showModal: store.getLoginModalData(),
-      loggedIn : false
+      loggedIn : false,
+      message : ''
     };
 
     store.on('LOGIN_MODAL_CHANGE', () => {
@@ -32,22 +33,35 @@ export default class main extends React.Component {
     store.on('LOGIN_BY_GOOGLE', () => {
       this.setState({ loggedIn : true })
     });
+
+    store.on('UPDATE_MESSAGE', (message) => {
+      this.setState({ message : message })
+    });
+
   }
-  
+
 
   render() {
     return (
       <div>
-        <Header parent_state ={{ action : action,
-                                showModal : this.state.showModal,
-                                loginByGoogle : this.state.loggedIn }} />
+        <Header parent_state = { {
+                                  action : action,
+                                  showModal : this.state.showModal,
+                                  loginByGoogle : this.state.loggedIn,
+                                  message : this.state.message
+                                } } />
         <Grid>
           <Row>
             <Col md={3}>
               <SideMenu />
             </Col>
             <Col md={9}>
-              <ChatMessages />
+              <ChatMessages parent_state = { {
+                                  action : action,
+                                  showModal : this.state.showModal,
+                                  loginByGoogle : this.state.loggedIn,
+                                  message : this.state.message
+                                } } />
             </Col>
           </Row>
         </Grid>
