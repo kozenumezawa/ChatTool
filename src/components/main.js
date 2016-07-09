@@ -21,16 +21,25 @@ export default class main extends React.Component {
     super(props)
 
     this.state = {
-      showModal: store.getLoginModalData(),
+      show_login_modal: store.getLoginModalData(),
+      show_sign_up_modal: store.getSignUpModalData(),
       loggedIn : false,
       message : ''
     };
 
     store.on('LOGIN_MODAL_CHANGE', () => {
-      this.setState({ showModal: store.getLoginModalData() })
+      this.setState({ show_login_modal: store.getLoginModalData() })
+    });
+
+    store.on('SIGN_UP_MODAL_CHANGE', () => {
+      this.setState({ show_sign_up_modal: store.getSignUpModalData() })
     });
 
     store.on('LOGIN_BY_GOOGLE', () => {
+      this.setState({ loggedIn : true })
+    });
+
+    store.on('SIGN_UP_BY_MAIL', () => {
       this.setState({ loggedIn : true })
     });
 
@@ -46,7 +55,8 @@ export default class main extends React.Component {
       <div>
         <Header parent_state = { {
                                   action : action,
-                                  showModal : this.state.showModal,
+                                  show_login_modal : this.state.show_login_modal,
+                                  show_sign_up_modal : this.state.show_sign_up_modal,
                                   loginByGoogle : this.state.loggedIn,
                                   message : this.state.message
                                 } } />
@@ -58,7 +68,8 @@ export default class main extends React.Component {
             <Col md={9}>
               <ChatMessages parent_state = { {
                                   action : action,
-                                  showModal : this.state.showModal,
+                                  show_login_modal : this.state.show_login_modal,
+                                  show_sign_up_modal : this.state.show_sign_up_modal,
                                   loginByGoogle : this.state.loggedIn,
                                   message : this.state.message
                                 } } />

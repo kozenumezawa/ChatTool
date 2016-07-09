@@ -1,12 +1,11 @@
 import Emitter from "./EventEmitter"
 import firebase from 'firebase'
 
-
 export default class Store extends Emitter {
   constructor(dispatcher) {
     super();
 
-    // Initialize Firebase
+    // Firebaseを初期化
     var config = {
       apiKey: "AIzaSyB4OQXeOmidR-oKw7XlYMjtNV2TxU-Ects",
       authDomain: "chattool-5a67b.firebaseapp.com",
@@ -23,12 +22,20 @@ export default class Store extends Emitter {
     this.commentsRef = firebase.database().ref('messages');
     this.commentsRef.on('child_added', this.loadMessages.bind(this));
 
-    this.showModal = false;
+    //  各stateの初期値設定
+    this.show_login_modal = false;
+    this.show_sign_up_modal = false;
 
     dispatcher.on('showLoginModal', this.showLoginModal.bind(this));
     dispatcher.on('closeLoginModal', this.closeLoginModal.bind(this));
     dispatcher.on('loginByGoogle', this.loginByGoogle.bind(this));
+
+
     dispatcher.on('sendMessage', this.sendMessage.bind(this));
+
+    dispatcher.on('showSignUpModal', this.showSignUpModal.bind(this));
+    dispatcher.on('closeSignUpModal', this.closeSignUpModal.bind(this));
+    dispatcher.on('signUpByMail', this.signUpByMail.bind(this));
   }
 
   initFirebase() {
@@ -41,18 +48,19 @@ export default class Store extends Emitter {
     this.emit('UPDATE_MESSAGE', data.val())
   }
 
+  //  ---Login モーダル関係---
   showLoginModal() {
-    this.showModal = true;
+    this.show_login_modal = true;
     this.emit('LOGIN_MODAL_CHANGE');
   }
 
   closeLoginModal() {
-    this.showModal = false;
+    this.show_login_modal = false;
     this.emit('LOGIN_MODAL_CHANGE');
   }
 
   getLoginModalData() {
-    return this.showModal;
+    return this.show_login_modal;
   }
 
   //  Googleアカウントでログイン
@@ -63,18 +71,41 @@ export default class Store extends Emitter {
       //  ログイン成功
       this.emit('LOGIN_BY_GOOGLE');
       this.closeLoginModal();
-      console.log(firebase.auth().currentUser);
-
     }).catch(function(error) {
       //  ログイン失敗
     });
   }
+  //  ---Login モーダル関係終わり---
+
+
+  //  ---sign up モーダル関係---
+  showSignUpModal() {
+    this.show_sign_up_modal = true;
+    this.emit('SIGN_UP_MODAL_CHANGE')
+  }
+
+  closeSignUpModal() {
+    this.show_sign_up_modal = false;
+    this.emit('SIGN_UP_MODAL_CHANGE')
+  }
+
+  signUpByMail() {
+    this.closeSignUpModal();
+  }
+
+  getSignUpModalData() {
+    return this.show_sign_up_modal;
+  }
+  //  ---sign up モーダル関係終わり---
+
 
   sendMessage(message) {
     const postData = {
       name: firebase.auth().currentUser.displayName,
       body: message
     }
-    firebase.database().ref('messages').push(postData);
+    if(postBody.body != ""){
+      firebase.database().ref('messages').push(postData);
+    }
   }
 }

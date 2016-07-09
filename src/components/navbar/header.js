@@ -7,17 +7,24 @@ import { MenuItem } from 'react-bootstrap'
 import { NavItem } from 'react-bootstrap'
 
 import LoginModal from './login-modal'
+import SignUpModal from './signup-modal'
 
 export default class header extends React.Component {
   constructor(props) {
     super(props);
     this._openLoginModal = this._openLoginModal.bind(this);
+    this._openSignUpModal = this._openSignUpModal.bind(this);
     this._loginByGoogle = this._loginByGoogle.bind(this);
   }
 
   //  ログインが押されたときの処理
   _openLoginModal() {
     this.props.parent_state.action.showLoginModal();
+  }
+
+  //  会員登録が押されたときの処理
+  _openSignUpModal() {
+    this.props.parent_state.action.showSignUpModal();
   }
 
   //  親へGoogleアカウントでログインが押されたことを通知
@@ -29,6 +36,7 @@ export default class header extends React.Component {
     return (
       <div>
         <LoginModal parent_state = { this.props.parent_state } />
+        <SignUpModal parent_state = { this.props.parent_state } />
         <Navbar>
           <Navbar.Header>
             <Navbar.Brand>
@@ -40,7 +48,7 @@ export default class header extends React.Component {
           <Navbar.Collapse>
             <Nav>
               <NavItem eventKey={1} href="#" onSelect={this._openLoginModal} > Googleアカウントでログイン</NavItem>
-              <NavItem eventKey={2} href="#"> 新規登録</NavItem>
+              <NavItem eventKey={2} href="#" onSelect={this._openSignUpModal}> 新規登録</NavItem>
             </Nav>
 
             <Nav pullRight>

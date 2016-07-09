@@ -9,13 +9,15 @@ export default class message extends React.Component {
 
   //  メッセージの追加(propsの更新)に合わせて、表示するメッセージを変更する
   componentWillReceiveProps(nextProps) {
-    this.render_messages.push(
-      <div className="chat-area">
-        <div className="chat-hukidashi">
-          {nextProps.parent_state.message.body}
+    if(nextProps.parent_state.message.body != this.props.parent_state.message.body){
+      this.render_messages.push(
+        <div className="chat-area">
+          <div className="chat-hukidashi">
+            {nextProps.parent_state.message.body}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   render() {
