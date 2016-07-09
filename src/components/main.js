@@ -23,7 +23,7 @@ export default class main extends React.Component {
     this.state = {
       show_login_modal: store.getLoginModalData(),
       show_sign_up_modal: store.getSignUpModalData(),
-      loggedIn : false,
+      logged_in : store.getLoggedinInfo(),
       message : ''
     };
 
@@ -36,15 +36,19 @@ export default class main extends React.Component {
     });
 
     store.on('LOGIN_BY_GOOGLE', () => {
-      this.setState({ loggedIn : true })
+      this.setState({ logged_in : true })
     });
 
     store.on('SIGN_UP_BY_MAIL', () => {
-      this.setState({ loggedIn : true })
+      this.setState({ logged_in : true })
     });
 
     store.on('UPDATE_MESSAGE', (message) => {
       this.setState({ message : message })
+    });
+
+    store.on('CHANGE_LOGGEDIN_STATE', () => {
+      this.setState({ logged_in : store.getLoggedinInfo() })
     });
 
   }
@@ -57,7 +61,7 @@ export default class main extends React.Component {
                                   action : action,
                                   show_login_modal : this.state.show_login_modal,
                                   show_sign_up_modal : this.state.show_sign_up_modal,
-                                  loginByGoogle : this.state.loggedIn,
+                                  logged_in : this.state.logged_in,
                                   message : this.state.message
                                 } } />
         <Grid>
@@ -70,7 +74,7 @@ export default class main extends React.Component {
                                   action : action,
                                   show_login_modal : this.state.show_login_modal,
                                   show_sign_up_modal : this.state.show_sign_up_modal,
-                                  loginByGoogle : this.state.loggedIn,
+                                  logged_in : this.state.logged_in,
                                   message : this.state.message
                                 } } />
             </Col>

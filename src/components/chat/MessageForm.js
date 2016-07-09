@@ -27,7 +27,6 @@ export default class MessageForm extends React.Component {
   
   //  送信ボタンが押されたときの処理
   onClick() {
-    // this.setState({ textAreaValue: this.refs.textArea.getDOMNode().value });
     if(this.state.textAreaValue != "") {
       this.props.parent_state.action.sendMessage(this.state.textAreaValue);
       this.setState({ textAreaValue: ""})

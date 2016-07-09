@@ -32,7 +32,11 @@ export default class Action {
   }
   //  ---SignUp モーダル関係終わり---
 
-  
+
+  logout() {
+    this.dispatcher.emit('logout')
+  }
+
   sendMessage(message) {
     this.dispatcher.emit('sendMessage', message)
   }

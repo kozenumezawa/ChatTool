@@ -22,20 +22,13 @@ export default class Store extends Emitter {
     this.commentsRef = firebase.database().ref('messages');
     this.commentsRef.on('child_added', this.loadMessages.bind(this));
 
-    //  各stateの初期値設定
+    //  各stateの初期値設定f
     this.show_login_modal = false;
     this.show_sign_up_modal = false;
+    this.user_loggedin = false;
 
     //  ログイン状況を監視する関数をセット
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in.
-        console.log('siggned in');
-      } else {
-        console.log('siddned out')
-        // No user is signed in.
-      }
-    });
+    firebase.auth().onAuthStateChanged(this.changeLoggedinState.bind(this));
 
     dispatcher.on('showLoginModal', this.showLoginModal.bind(this));
     dispatcher.on('closeLoginModal', this.closeLoginModal.bind(this));
@@ -47,6 +40,8 @@ export default class Store extends Emitter {
     dispatcher.on('showSignUpModal', this.showSignUpModal.bind(this));
     dispatcher.on('closeSignUpModal', this.closeSignUpModal.bind(this));
     dispatcher.on('signUpByMail', this.signUpByMail.bind(this));
+
+    dispatcher.on('logout', this.logout.bind(this));
   }
 
   initFirebase() {
@@ -54,6 +49,19 @@ export default class Store extends Emitter {
     this.storage = firebase.storage();
   }
 
+  changeLoggedinState(user) {
+    if (user) {
+      // User is signed in.
+      this.user_loggedin = true;
+    } else {
+      this.user_loggedin = false;
+    }
+    this.emit('CHANGE_LOGGEDIN_STATE')
+  }
+
+  getLoggedinInfo() {
+    return this.user_loggedin;
+  }
   //  全メッセージの読み込みと、新規メッセージの読み込み
   loadMessages(data) {
     this.emit('UPDATE_MESSAGE', data.val())
@@ -115,8 +123,16 @@ export default class Store extends Emitter {
       name: firebase.auth().currentUser.displayName,
       body: message
     }
-    if(postBody.body != ""){
+    if(postData.body != ""){
       firebase.database().ref('messages').push(postData);
     }
+  }
+
+  logout() {
+    firebase.auth().signOut().then(() => {
+
+    }, (error) => {
+      //  ログインできなかったときの処理
+    });
   }
 }
