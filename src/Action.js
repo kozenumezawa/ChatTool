@@ -15,6 +15,10 @@ export default class Action {
   loginByGoogle() {
     this.dispatcher.emit('loginByGoogle');
   }
+
+  loginByMail(userdata) {
+    this.dispatcher.emit('loginByMail', userdata);
+  }
   //  ---Login モーダル関係終わり---
 
 

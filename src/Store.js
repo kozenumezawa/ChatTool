@@ -34,7 +34,7 @@ export default class Store extends Emitter {
     dispatcher.on('showLoginModal', this.showLoginModal.bind(this));
     dispatcher.on('closeLoginModal', this.closeLoginModal.bind(this));
     dispatcher.on('loginByGoogle', this.loginByGoogle.bind(this));
-
+    dispatcher.on('loginByMail', this.loginByMail.bind(this));
 
     dispatcher.on('sendMessage', this.sendMessage.bind(this));
 
@@ -107,7 +107,7 @@ export default class Store extends Emitter {
   getLoggedinInfo() {
     return this.user_loggedin;
   }
-  
+
   //  全メッセージの読み込みと、新規メッセージの読み込み
   loadMessages(data) {
     this.emit('UPDATE_MESSAGE', data.val())
@@ -137,6 +137,14 @@ export default class Store extends Emitter {
       this.closeLoginModal();
     }).catch(function(error) {
       //  ログイン失敗
+    });
+  }
+
+  loginByMail(userdata){
+    var auth = firebase.auth();
+    firebase.auth().signInWithEmailAndPassword(userdata.mail, userdata.password_value).catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
     });
   }
   //  ---Login モーダル関係終わり---

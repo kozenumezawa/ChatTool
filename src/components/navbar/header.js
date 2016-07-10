@@ -86,7 +86,7 @@ export default class header extends React.Component {
 
             <Navbar.Collapse>
               <Nav>
-                <NavItem eventKey={1} href="#" onClick={this._openLoginModal} > Googleアカウントでログイン</NavItem>
+                <NavItem eventKey={1} href="#" onClick={this._openLoginModal} > ログイン</NavItem>
                 <NavItem eventKey={2} href="#" onClick={this._openSignUpModal}> 新規登録</NavItem>
               </Nav>
             </Navbar.Collapse>
