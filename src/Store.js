@@ -18,8 +18,6 @@ export default class Store extends Emitter {
     this.rootRef = firebase.database().ref();
     this.initFirebase();
 
-    //  データベースの参照開始
-    this.commentsRef = firebase.database().ref('messages');
 
     //  各stateの初期値設定f
     this.show_login_modal = false;
@@ -50,7 +48,21 @@ export default class Store extends Emitter {
 
   changeLoggedinState(user) {
     if (user) {
-      // User is signed in.
+      // ユーザーログイン時の処理
+
+      //  ユーザー情報をデータベースの/user下に記録(アップデート)
+      const current_user = firebase.auth().currentUser;
+      const postData = {
+        user_uid : current_user.uid,
+        user_name : current_user.displayName
+      }
+      const path = 'users/' + current_user.uid;
+      const usersRef =  firebase.database().ref(path);
+      usersRef.update(postData);
+
+
+      //  データベースの参照開始
+      this.commentsRef = firebase.database().ref('messages');
       this.commentsRef.on('child_added', this.loadMessages.bind(this));
       this.user_loggedin = true;
     } else {
@@ -89,7 +101,6 @@ export default class Store extends Emitter {
     var provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider).then((result) => {
       //  ログイン成功
-      this.emit('LOGIN_BY_GOOGLE');
       this.closeLoginModal();
     }).catch(function(error) {
       //  ログイン失敗

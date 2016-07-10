@@ -36,7 +36,7 @@ export default class signup extends React.Component {
 
   getPasswordState() {
     if(this.state.password_value != '') {
-      const pattern = new RegExp(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{4,16}$/, 'i');
+      const pattern = new RegExp(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{6,16}$/, 'i');
       if(pattern.test(this.state.password_value)) {
         return 'success';
       } else {
@@ -76,7 +76,7 @@ export default class signup extends React.Component {
               <FormControl type="email" placeholder="" onChange={this.handleMailChange}/>
             </FormGroup>
             <FormGroup controlId="formControlsPassword" validationState={this.getPasswordState()}>
-              <ControlLabel>パスワード (半角英数 4文字以上 16文字以下)</ControlLabel>
+              <ControlLabel>パスワード (半角英数 6文字以上 16文字以下)</ControlLabel>
               <FormControl type="password" onChange={this.handlePasswordChange}/>
               <FormControl.Feedback />
             </FormGroup>

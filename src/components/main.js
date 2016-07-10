@@ -35,14 +35,6 @@ export default class main extends React.Component {
       this.setState({ show_sign_up_modal: store.getSignUpModalData() })
     });
 
-    store.on('LOGIN_BY_GOOGLE', () => {
-      this.setState({ logged_in : true })
-    });
-
-    store.on('SIGN_UP_BY_MAIL', () => {
-      this.setState({ logged_in : true })
-    });
-
     store.on('UPDATE_MESSAGE', (message) => {
       this.setState({ message : message })
     });
