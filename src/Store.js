@@ -47,6 +47,7 @@ export default class Store extends Emitter {
     dispatcher.on('searchName', this.searchName.bind(this));
     dispatcher.on('addContact', this.addContact.bind(this));
 
+    dispatcher.on('changeTalk', this.changeTalk.bind(this));
     this.getContactList = this.getContactList.bind(this);
   }
 
@@ -284,5 +285,9 @@ export default class Store extends Emitter {
     }, (error) => {
       //  ログインできなかったときの処理
     });
+  }
+
+  changeTalk(user) {
+    console.log(user);
   }
 }

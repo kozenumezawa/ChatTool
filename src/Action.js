@@ -59,4 +59,7 @@ export default class Action {
   }
   //  ---連絡先を追加 モーダル関係終わり---
 
+  changeTalk(user) {
+    this.dispatcher.emit('changeTalk', user)
+  }
 }

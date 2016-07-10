@@ -8,6 +8,11 @@ export default class ContactList extends React.Component {
     super(props);
 
     this.render_contact = [];
+    this.state = {
+      active_key : 0
+    };
+
+    this.changeTalk = this.changeTalk.bind(this);
   }
 
   //  検索によって得たユーザーデータに合わせて、表示するテーブルを変える
@@ -17,7 +22,7 @@ export default class ContactList extends React.Component {
 
       nextProps.parent_state.contact_list.forEach((element, index) => {
         this.render_contact.push(
-          <NavItem eventKey={ index } href="#">
+          <NavItem eventKey={ index } onClick={this.changeTalk.bind(this, index, element)} href="#">
             { element.friend_name }
           </NavItem>
         );
@@ -25,11 +30,15 @@ export default class ContactList extends React.Component {
     }
   }
 
+  changeTalk(index, user) {
+    this.setState({active_key : index });
+    this.props.parent_state.action.changeTalk(user);
+  }
+
   render() {
-    const active_key = 0;
     return (
-      <Nav bsStyle="pills" activeKey={ active_key } stacked>
-        <NavItem eventKey={ active_key } href="#">
+      <Nav bsStyle="pills" activeKey={ this.state.active_key } stacked>
+        <NavItem eventKey={ this.state.active_key } href="#">
           連絡先リスト
         </NavItem>
         { this.render_contact }
