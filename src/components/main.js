@@ -27,6 +27,7 @@ export default class main extends React.Component {
       searched_user : [],
       logged_in : store.getLoggedinInfo(),
       contact_list : store.getContactList(),
+      room_uid : store.getRoomUid(),
       message : ''
     };
 
@@ -62,6 +63,11 @@ export default class main extends React.Component {
     store.on('GET_CONTACT', () => {
       this.setState({ contact_list : store.getContactList() });
     });
+
+    store.on('CHANGE_ROOM', () => {
+      // this.setState({ contact_list : store.getContactList() });
+      this.setState({ room_uid : store.getRoomUid() });
+    });
   }
 
 
@@ -76,6 +82,7 @@ export default class main extends React.Component {
                                   searched_user : this.state.searched_user,
                                   contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
+                                  room_uid : this.state.room_uid,
                                   message : this.state.message
                                 } } />
         <Grid>
@@ -89,6 +96,7 @@ export default class main extends React.Component {
                                   searched_user : this.state.searched_user,
                                   contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
+                                  room_uid : this.state.room_uid,
                                   message : this.state.message
                                 } } />
             </Col>
@@ -97,9 +105,11 @@ export default class main extends React.Component {
                                   action : action,
                                   show_login_modal : this.state.show_login_modal,
                                   show_sign_up_modal : this.state.show_sign_up_modal,
+                                  show_add_by_name_modal : this.state.show_add_by_name_modal,
                                   searched_user : this.state.searched_user,
                                   contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
+                                  room_uid : this.state.room_uid,
                                   message : this.state.message
                                 } } />
             </Col>

@@ -9,7 +9,13 @@ export default class message extends React.Component {
 
   //  メッセージの追加(propsの更新)に合わせて、表示するメッセージを変更する
   componentWillReceiveProps(nextProps) {
-    if(nextProps.parent_state.message.body != this.props.parent_state.message.body){
+    //  ルームIDが変わったら、メッセージを全部削除
+    if(nextProps.parent_state.room_uid != this.props.parent_state.room_uid) {
+      this.render_messages = [];
+    }
+    
+
+    if(nextProps.parent_state.message != this.props.parent_state.message){
       this.render_messages.push(
         <div className="chat-area">
           <div className="chat-hukidashi">

@@ -25,6 +25,8 @@ export default class Store extends Emitter {
     this.user_loggedin = false;
     this.show_add_by_name_modal = false;
     this.find_user = [];
+    this.room_path = '';
+    this.room_uid = '';
 
     //  ログイン状況を監視する関数をセット
     firebase.auth().onAuthStateChanged(this.changeLoggedinState.bind(this));
@@ -69,17 +71,34 @@ export default class Store extends Emitter {
         const path = 'users/' + current_user.uid;
         const usersRef =  firebase.database().ref(path);
         usersRef.update(postData);
+
+        //  連絡先があるか検索し、ある場合、連絡先の一番上の人のチャットメッセージを所得
+        firebase.database().ref('users/' + current_user.uid + '/list/').once('value').then( (snapshot) => {
+          const my_uid = firebase.auth().currentUser.uid;
+          const users = snapshot.val();
+          Object.keys(users).forEach( (element, index) => {
+            const user = users[element];  //  ユーザー情報を所得
+            if(index == 0) {
+              //  データベースの参照開始
+              this.room_path = 'rooms/' + user.room_uid + '/messages/';
+              this.commentsRef = firebase.database().ref(this.room_path);
+              this.commentsRef.on('child_added', this.loadMessages.bind(this));
+              this.room_uid = user.room_uid;  //  現在のルームの更新
+              this.emit('CHANGE_ROOM');
+            }
+          });
+        });
       }
 
-      //  データベースの参照開始
-      this.commentsRef = firebase.database().ref('messages');
-      this.commentsRef.on('child_added', this.loadMessages.bind(this));
       this.user_loggedin = true;
 
       this.emit('UPDATA_CONTACT');
     } else {
-      this.commentsRef.off('child_added', this.loadMessages.bind(this));
+      // this.commentsRef.off('child_added', this.loadMessages.bind(this));
       this.user_loggedin = false;
+      this.contact_list = [];
+
+      this.emit('GET_CONTACT');
     }
     this.emit('CHANGE_LOGGEDIN_STATE')
 
@@ -274,8 +293,8 @@ export default class Store extends Emitter {
       name: firebase.auth().currentUser.displayName,
       body: message
     }
-    if(postData.body != ""){
-      firebase.database().ref('messages').push(postData);
+    if(postData.body != '' && this.room_path != '' ){
+      firebase.database().ref(this.room_path).push(postData);
     }
   }
 
@@ -288,6 +307,16 @@ export default class Store extends Emitter {
   }
 
   changeTalk(user) {
-    console.log(user);
+    this.room_uid = user.room_uid;  //  現在のルームの更新
+    this.emit('CHANGE_ROOM');
+
+    //  データベースの参照開始
+    this.room_path = 'rooms/' + user.room_uid + '/messages/';
+    this.commentsRef = firebase.database().ref(this.room_path);
+    this.commentsRef.on('child_added', this.loadMessages.bind(this));
+  }
+
+  getRoomUid() {
+    return this.room_uid;
   }
 }
