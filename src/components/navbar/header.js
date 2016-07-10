@@ -8,6 +8,7 @@ import { NavItem } from 'react-bootstrap'
 
 import LoginModal from './login-modal'
 import SignUpModal from './signup-modal'
+import AddContactModal from './addcontact-modal'
 
 export default class header extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export default class header extends React.Component {
     this._openLoginModal = this._openLoginModal.bind(this);
     this._openSignUpModal = this._openSignUpModal.bind(this);
     this._logout = this._logout.bind(this);
+    this._openAddByNameModal = this._openAddByNameModal.bind(this);
   }
 
   //  ログインが押されたときの処理
@@ -32,12 +34,18 @@ export default class header extends React.Component {
     this.props.parent_state.action.logout();
   }
 
+  //  名前で追加が押されたときの処理
+  _openAddByNameModal() {
+    this.props.parent_state.action.openAddByNameModal();
+  }
+
   //  ログイン中かどうかでrender()の内容を変える
   render() {
     if(this.props.parent_state.logged_in == true) {
       //  ログイン中の処理
       return (
         <div>
+          <AddContactModal parent_state = { this.props.parent_state } />
           <Navbar>
             <Navbar.Header>
               <Navbar.Brand>
@@ -53,7 +61,7 @@ export default class header extends React.Component {
 
               <Nav pullRight>
                 <NavDropdown eventKey={5} title="連絡先を追加" >
-                  <MenuItem eventKey={5.1}>IDで追加</MenuItem>
+                  <MenuItem eventKey={5.1} onClick={this._openAddByNameModal} >名前で追加</MenuItem>
                   <MenuItem divider />
                   <MenuItem eventKey={5.2}>メールアドレスで追加</MenuItem>
                 </NavDropdown>
@@ -78,8 +86,8 @@ export default class header extends React.Component {
 
             <Navbar.Collapse>
               <Nav>
-                <NavItem eventKey={1} href="#" onSelect={this._openLoginModal} > Googleアカウントでログイン</NavItem>
-                <NavItem eventKey={2} href="#" onSelect={this._openSignUpModal}> 新規登録</NavItem>
+                <NavItem eventKey={1} href="#" onClick={this._openLoginModal} > Googleアカウントでログイン</NavItem>
+                <NavItem eventKey={2} href="#" onClick={this._openSignUpModal}> 新規登録</NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>

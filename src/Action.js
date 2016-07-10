@@ -41,5 +41,18 @@ export default class Action {
     this.dispatcher.emit('sendMessage', message)
   }
 
+  //  ---連絡先を追加 モーダル関係---
+  openAddByNameModal() {
+    this.dispatcher.emit('openAddByNameModal')
+  }
+
+  closeAddByNameModal() {
+    this.dispatcher.emit('closeAddByNameModal')
+  }
+
+  searchName(name) {
+    this.dispatcher.emit('searchName', name)
+  }
+  //  ---連絡先を追加 モーダル関係終わり---
 
 }

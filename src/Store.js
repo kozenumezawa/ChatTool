@@ -23,6 +23,7 @@ export default class Store extends Emitter {
     this.show_login_modal = false;
     this.show_sign_up_modal = false;
     this.user_loggedin = false;
+    this.show_add_by_name_modal = false;
 
     //  ログイン状況を監視する関数をセット
     firebase.auth().onAuthStateChanged(this.changeLoggedinState.bind(this));
@@ -39,6 +40,10 @@ export default class Store extends Emitter {
     dispatcher.on('signUpByMail', this.signUpByMail.bind(this));
 
     dispatcher.on('logout', this.logout.bind(this));
+
+    dispatcher.on('openAddByNameModal', this.openAddByNameModal.bind(this));
+    dispatcher.on('closeAddByNameModal', this.closeAddByNameModal.bind(this));
+    dispatcher.on('searchName', this.searchName.bind(this));
   }
 
   initFirebase() {
@@ -49,17 +54,17 @@ export default class Store extends Emitter {
   changeLoggedinState(user) {
     if (user) {
       // ユーザーログイン時の処理
-
-      //  ユーザー情報をデータベースの/user下に記録(アップデート)
+      //  ユーザー情報をデータベースの/user下に記録(アップデート) sign up時の二重書き込みを防ぐためにif文を用いる
       const current_user = firebase.auth().currentUser;
-      const postData = {
-        user_uid : current_user.uid,
-        user_name : current_user.displayName
+      if(current_user.displayName != null) {
+        const postData = {
+          user_uid : current_user.uid,
+          user_name : current_user.displayName
+        }
+        const path = 'users/' + current_user.uid;
+        const usersRef =  firebase.database().ref(path);
+        usersRef.update(postData);
       }
-      const path = 'users/' + current_user.uid;
-      const usersRef =  firebase.database().ref(path);
-      usersRef.update(postData);
-
 
       //  データベースの参照開始
       this.commentsRef = firebase.database().ref('messages');
@@ -128,7 +133,23 @@ export default class Store extends Emitter {
       console.log('can not sign in')
       console.log(errorCode);
       console.log(errorMessage);
+    }).then(() => {
+      //  ユーザープロフィールに名前を追加
+      let current_user = firebase.auth().currentUser;
+      current_user.updateProfile({
+        displayName: userdata.name
+      });
+      //  ユーザー情報をデータベースの/user下に記録(アップデート)
+      current_user = firebase.auth().currentUser;
+      const postData = {
+        user_uid : current_user.uid,
+        user_name : userdata.name
+      }
+      const path = 'users/' + current_user.uid;
+      const usersRef =  firebase.database().ref(path);
+      usersRef.update(postData);
     });
+
     this.closeSignUpModal();
   }
 
@@ -137,6 +158,29 @@ export default class Store extends Emitter {
   }
   //  ---sign up モーダル関係終わり---
 
+  //  ---連絡先を追加 モーダル関係---
+  openAddByNameModal() {
+    this.show_add_by_name_modal = true;
+    this.emit('ADD_BY_NAME_MODAL_CHANGE')
+  }
+
+  closeAddByNameModal() {
+    this.show_add_by_name_modal = false;
+    this.emit('ADD_BY_NAME_MODAL_CHANGE')
+  }
+
+  getAddByNameModal() {
+    return this.show_add_by_name_modal;
+  }
+
+  searchName(name) {
+    //  users/以下の全データを読み込み、検索に一致する名前がないか検索
+    firebase.database().ref('users').once('value').then( (snapshot) => {
+      const uid = snapshot.val();
+      console.log(uid);
+    });
+  }
+  //  ---連絡先を追加 モーダル関係終わり---
 
   sendMessage(message) {
     const postData = {
