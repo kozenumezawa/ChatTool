@@ -21,6 +21,7 @@ export default class addcontact extends React.Component {
     this._close = this._close.bind(this);
     this._searchName = this._searchName.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.addContact = this.addContact.bind(this);
   }
 
   //  モーダルダイアログを閉じる処理
@@ -43,14 +44,21 @@ export default class addcontact extends React.Component {
       this.render_users = [];
       nextProps.parent_state.searched_user.forEach((element, index) => {
         this.render_users.push(
-          <tr>
-            <td>{ element.user_name }</td>
-            <td>{ element.user_uid }</td>
-            <td>FW</td>
-          </tr>
+          <div>
+            <tr>
+              <td>{ element.user_name }</td>
+              <td>{ element.user_uid }</td>
+              <td>FW</td>
+              <Button onClick={this.addContact.bind(this, element)}> 追加 </Button>
+            </tr>
+          </div>
         );
       });
     }
+  }
+
+  addContact(user) {
+    this.props.parent_state.action.addContact(user);
   }
 
   render() {

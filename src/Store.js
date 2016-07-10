@@ -17,7 +17,7 @@ export default class Store extends Emitter {
     // データベースの参照を準備
     this.rootRef = firebase.database().ref();
     this.initFirebase();
-
+    this.contact_list = [];
 
     //  各stateの初期値設定f
     this.show_login_modal = false;
@@ -45,6 +45,9 @@ export default class Store extends Emitter {
     dispatcher.on('openAddByNameModal', this.openAddByNameModal.bind(this));
     dispatcher.on('closeAddByNameModal', this.closeAddByNameModal.bind(this));
     dispatcher.on('searchName', this.searchName.bind(this));
+    dispatcher.on('addContact', this.addContact.bind(this));
+
+    this.getContactList = this.getContactList.bind(this);
   }
 
   initFirebase() {
@@ -71,11 +74,14 @@ export default class Store extends Emitter {
       this.commentsRef = firebase.database().ref('messages');
       this.commentsRef.on('child_added', this.loadMessages.bind(this));
       this.user_loggedin = true;
+
+      this.emit('UPDATA_CONTACT');
     } else {
       this.commentsRef.off('child_added', this.loadMessages.bind(this));
       this.user_loggedin = false;
     }
     this.emit('CHANGE_LOGGEDIN_STATE')
+
   }
 
   getLoggedinInfo() {
@@ -177,10 +183,12 @@ export default class Store extends Emitter {
   searchName(name) {
     //  users/以下の全データを読み込み、検索に一致する名前がないか検索
     firebase.database().ref('users').once('value').then( (snapshot) => {
+      const my_uid = firebase.auth().currentUser.uid;
+
       const users = snapshot.val();
       Object.keys(users).forEach( (element, index) => {
         const user = users[element];  //  ユーザー情報を所得
-        if(name == user.user_name){
+        if(name == user.user_name && user.user_uid != my_uid){
           this.find_user.push(user);
         }
       });
@@ -188,6 +196,75 @@ export default class Store extends Emitter {
       this.find_user = [];
     });
 
+  }
+
+  //  新しくrooms/下にroomを作り、自分と相手に連絡先を追加する
+  addContact(user) {
+    const friend_uid = user.user_uid;
+    const friend_name = user.user_name;
+
+    //  自分と相手の連絡先を追加
+    const current_user = firebase.auth().currentUser;
+    const my_uid = current_user.uid;
+
+    //  新しくルームを作る ルームidは、自分と相手のuidをつなげる
+    const room_uid = my_uid + friend_uid;
+    const room_post_data = {
+      room_uid : room_uid
+    }
+    const room_path = 'rooms/' + room_uid;
+    const room_ref = firebase.database().ref(room_path);
+    room_ref.update(room_post_data)
+
+    //  自分の連絡先リストデータベースを更新
+    const my_post_data = {
+      friend_name : friend_name,
+      friend_uid : friend_uid,
+      room_uid : room_uid
+    }
+    const my_path = 'users/' + my_uid + '/list/' + friend_uid;
+    const my_ref = firebase.database().ref(my_path);
+    my_ref.update(my_post_data)
+
+    //  相手の連絡先リストデータベースを更新
+    const friend_post_data = {
+      friend_name : current_user.displayName,
+      friend_uid : my_uid,
+      room_uid : room_uid
+    }
+    const friend_path = 'users/' + friend_uid + '/list/' + my_uid;
+    const friend_ref = firebase.database().ref(friend_path);
+    friend_ref.update(friend_post_data).then(() => {
+      this.emit('UPDATA_CONTACT');
+    });
+
+  }
+
+  updateContactList() {
+    const current_user = firebase.auth().currentUser;
+    this.contact_list = [];
+
+    //  ログインしているときに、コンタクトリストを返す
+    if(current_user) {
+      //  データベースのデータからコンタクトリストを作成する
+      const my_uid = current_user.uid;
+      const contact_path = 'users/' + my_uid + '/list/';
+      firebase.database().ref(contact_path).once('value').then( (snapshot) => {
+        const users = snapshot.val();
+        Object.keys(users).forEach( (element, index) => {
+          const friend_user = users[element];  //  フレンドリストを所得
+          this.contact_list.push(friend_user);
+        });
+      }).then(() => {
+        this.emit('GET_CONTACT');
+      })
+    } else {
+      this.emit('GET_CONTACT');
+    }
+  }
+
+  getContactList() {
+    return this.contact_list;
   }
   //  ---連絡先を追加 モーダル関係終わり---
 

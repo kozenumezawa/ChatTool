@@ -5,7 +5,7 @@ import { Row } from 'react-bootstrap'
 import { Col } from 'react-bootstrap'
 
 import Header from './navbar/header'
-import SideMenu from './navbar/sidemenu'
+import ContactList from './navbar/contact-list'
 import ChatMessages from'./chat-messages'
 
 import Action from '../Action'
@@ -26,6 +26,7 @@ export default class main extends React.Component {
       show_add_by_name_modal: store.getAddByNameModal(),
       searched_user : [],
       logged_in : store.getLoggedinInfo(),
+      contact_list : store.getContactList(),
       message : ''
     };
 
@@ -52,6 +53,15 @@ export default class main extends React.Component {
     store.on('END_SEARCH_NAME', (data) => {
       this.setState({ searched_user: data })
     });
+
+    store.on('UPDATA_CONTACT', () => {
+      //  updateContactList内で 'GET_CONTACT'が発行され、contact_listが更新される
+      store.updateContactList();
+    });
+
+    store.on('GET_CONTACT', () => {
+      this.setState({ contact_list : store.getContactList() });
+    });
   }
 
 
@@ -64,13 +74,23 @@ export default class main extends React.Component {
                                   show_sign_up_modal : this.state.show_sign_up_modal,
                                   show_add_by_name_modal : this.state.show_add_by_name_modal,
                                   searched_user : this.state.searched_user,
+                                  contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
                                   message : this.state.message
                                 } } />
         <Grid>
           <Row>
             <Col md={3}>
-              <SideMenu />
+              <ContactList parent_state = { {
+                                  action : action,
+                                  show_login_modal : this.state.show_login_modal,
+                                  show_sign_up_modal : this.state.show_sign_up_modal,
+                                  show_add_by_name_modal : this.state.show_add_by_name_modal,
+                                  searched_user : this.state.searched_user,
+                                  contact_list : this.state.contact_list,
+                                  logged_in : this.state.logged_in,
+                                  message : this.state.message
+                                } } />
             </Col>
             <Col md={9}>
               <ChatMessages parent_state = { {
@@ -78,6 +98,7 @@ export default class main extends React.Component {
                                   show_login_modal : this.state.show_login_modal,
                                   show_sign_up_modal : this.state.show_sign_up_modal,
                                   searched_user : this.state.searched_user,
+                                  contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
                                   message : this.state.message
                                 } } />

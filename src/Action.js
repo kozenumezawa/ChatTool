@@ -53,6 +53,10 @@ export default class Action {
   searchName(name) {
     this.dispatcher.emit('searchName', name)
   }
+
+  addContact(user) {
+    this.dispatcher.emit('addContact', user)
+  }
   //  ---連絡先を追加 モーダル関係終わり---
 
 }
