@@ -24,6 +24,7 @@ export default class main extends React.Component {
       show_login_modal: store.getLoginModalData(),
       show_sign_up_modal: store.getSignUpModalData(),
       show_add_by_name_modal: store.getAddByNameModal(),
+      searched_user : [],
       logged_in : store.getLoggedinInfo(),
       message : ''
     };
@@ -47,6 +48,10 @@ export default class main extends React.Component {
     store.on('ADD_BY_NAME_MODAL_CHANGE', () => {
       this.setState({ show_add_by_name_modal: store.getAddByNameModal() })
     });
+
+    store.on('END_SEARCH_NAME', (data) => {
+      this.setState({ searched_user: data })
+    });
   }
 
 
@@ -58,6 +63,7 @@ export default class main extends React.Component {
                                   show_login_modal : this.state.show_login_modal,
                                   show_sign_up_modal : this.state.show_sign_up_modal,
                                   show_add_by_name_modal : this.state.show_add_by_name_modal,
+                                  searched_user : this.state.searched_user,
                                   logged_in : this.state.logged_in,
                                   message : this.state.message
                                 } } />
@@ -71,6 +77,7 @@ export default class main extends React.Component {
                                   action : action,
                                   show_login_modal : this.state.show_login_modal,
                                   show_sign_up_modal : this.state.show_sign_up_modal,
+                                  searched_user : this.state.searched_user,
                                   logged_in : this.state.logged_in,
                                   message : this.state.message
                                 } } />

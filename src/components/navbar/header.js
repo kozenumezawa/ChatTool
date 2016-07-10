@@ -61,7 +61,7 @@ export default class header extends React.Component {
 
               <Nav pullRight>
                 <NavDropdown eventKey={5} title="連絡先を追加" >
-                  <MenuItem eventKey={5.1} onClick={this._openAddByNameModal} >名前で追加</MenuItem>
+                  <MenuItem eventKey={5.1} onClick={this._openAddByNameModal} >ユーザー名で追加</MenuItem>
                   <MenuItem divider />
                   <MenuItem eventKey={5.2}>メールアドレスで追加</MenuItem>
                 </NavDropdown>

@@ -24,6 +24,7 @@ export default class Store extends Emitter {
     this.show_sign_up_modal = false;
     this.user_loggedin = false;
     this.show_add_by_name_modal = false;
+    this.find_user = [];
 
     //  ログイン状況を監視する関数をセット
     firebase.auth().onAuthStateChanged(this.changeLoggedinState.bind(this));
@@ -176,9 +177,17 @@ export default class Store extends Emitter {
   searchName(name) {
     //  users/以下の全データを読み込み、検索に一致する名前がないか検索
     firebase.database().ref('users').once('value').then( (snapshot) => {
-      const uid = snapshot.val();
-      console.log(uid);
+      const users = snapshot.val();
+      Object.keys(users).forEach( (element, index) => {
+        const user = users[element];  //  ユーザー情報を所得
+        if(name == user.user_name){
+          this.find_user.push(user);
+        }
+      });
+      this.emit('END_SEARCH_NAME', this.find_user);
+      this.find_user = [];
     });
+
   }
   //  ---連絡先を追加 モーダル関係終わり---
 
