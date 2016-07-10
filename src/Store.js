@@ -187,10 +187,14 @@ export default class Store extends Emitter {
       const postData = {
         user_uid : current_user.uid,
         user_name : userdata.name
-      }
+      };
+
+      this.user_name = userdata.name;
+
       const path = 'users/' + current_user.uid;
       const usersRef =  firebase.database().ref(path);
       usersRef.update(postData);
+      this.emit('CHANGE_NAME');
     });
 
     this.closeSignUpModal();

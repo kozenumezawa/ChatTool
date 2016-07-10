@@ -39,7 +39,7 @@ export default class message extends React.Component {
     if(change_flag == false && nextProps.parent_state.message != this.props.parent_state.message){
       //  発言主によってCSSを分ける
       if(nextProps.parent_state.message.name == nextProps.parent_state.user_name) {
-        this.render_messages.push(
+        this.render_messages.unshift(
           <div className="chat-area">
             <div className="hukidashi-me">
               {nextProps.parent_state.message.body}
@@ -47,7 +47,7 @@ export default class message extends React.Component {
           </div>
         );
       } else {
-        this.render_messages.push(
+        this.render_messages.unshift(
           <div className="chat-area">
             <div className="hukidashi-friend friend">
               {nextProps.parent_state.message.body}

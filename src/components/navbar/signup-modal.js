@@ -36,7 +36,9 @@ export default class signup extends React.Component {
 
   //  登録ボタンが押されたときの処理
   _signUpByMail() {
-    this.props.parent_state.action.signUpByMail(this.state);
+    if(this.state.name != '' && this.state.mail != '' && this.state.password_value != ''){
+      this.props.parent_state.action.signUpByMail(this.state);
+    }
   }
 
   getPasswordState() {
@@ -87,7 +89,7 @@ export default class signup extends React.Component {
             </FormGroup>
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="primary" onClick={this._signUpByMail}>ログイン</Button>
+            <Button bsStyle="primary" onClick={this._signUpByMail}>登録</Button>
             <Button onClick={this._close}>キャンセル</Button>
           </Modal.Footer>
         </Modal>

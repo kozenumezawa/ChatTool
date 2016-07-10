@@ -38,10 +38,13 @@ export default class login extends React.Component {
   //  Googleアカウントでログインが押されたときの処理
   _loginByGoogle() {
     this.props.parent_state.action.loginByGoogle();
+    _close();
   }
 
   _loginByMail() {
-    this.props.parent_state.action.loginByMail(this.state);
+    if(this.state.name != '' && this.state.mail != '' && this.state.password_value != ''){
+      this.props.parent_state.action.loginByMail(this.state);
+    }
   }
   getPasswordState() {
     if(this.state.password_value != '') {
