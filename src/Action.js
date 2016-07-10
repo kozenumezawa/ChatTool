@@ -66,4 +66,8 @@ export default class Action {
   changeTalk(user) {
     this.dispatcher.emit('changeTalk', user)
   }
+
+  closeErrorModal() {
+    this.dispatcher.emit('closeErrorModal')
+  }
 }

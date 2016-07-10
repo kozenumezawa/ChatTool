@@ -38,6 +38,7 @@ export default class signup extends React.Component {
   _signUpByMail() {
     if(this.state.name != '' && this.state.mail != '' && this.state.password_value != ''){
       this.props.parent_state.action.signUpByMail(this.state);
+      this._close();
     }
   }
 

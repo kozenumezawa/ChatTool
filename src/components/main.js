@@ -29,6 +29,8 @@ export default class main extends React.Component {
       contact_list : store.getContactList(),
       room_uid : store.getRoomUid(),
       user_name : store.getUserName(),
+      show_error_modal : false,
+      error_data : {},
       message : ''
     };
 
@@ -71,8 +73,21 @@ export default class main extends React.Component {
     });
 
     store.on('CHANGE_NAME', () => {
-      // this.setState({ contact_list : store.getContactList() });
       this.setState({ user_name : store.getUserName() });
+    });
+
+    store.on('ERROR', (error_data) => {
+      this.setState({
+        show_error_modal : true,
+        error_data : error_data
+      });
+    });
+
+    store.on('CLOSE_ERROR_MODAL', () => {
+      this.setState({
+        show_error_modal : false,
+        error_data : {}
+      });
     });
   }
 
@@ -90,6 +105,8 @@ export default class main extends React.Component {
                                   logged_in : this.state.logged_in,
                                   room_uid : this.state.room_uid,
                                   user_name : this.state.user_name,
+                                  show_error_modal : this.state.show_error_modal,
+                                  error_data : this.state.error_data,
                                   message : this.state.message
                                 } } />
         <Grid>
@@ -105,6 +122,8 @@ export default class main extends React.Component {
                                   logged_in : this.state.logged_in,
                                   room_uid : this.state.room_uid,
                                   user_name : this.state.user_name,
+                                  show_error_modal : this.state.show_error_modal,
+                                  error_data : this.state.error_data,
                                   message : this.state.message
                                 } } />
             </Col>
@@ -119,6 +138,8 @@ export default class main extends React.Component {
                                   logged_in : this.state.logged_in,
                                   room_uid : this.state.room_uid,
                                   user_name : this.state.user_name,
+                                  show_error_modal : this.state.show_error_modal,
+                                  error_data : this.state.error_data,
                                   message : this.state.message
                                 } } />
             </Col>

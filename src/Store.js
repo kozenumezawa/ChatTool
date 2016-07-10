@@ -51,6 +51,7 @@ export default class Store extends Emitter {
     dispatcher.on('addContact', this.addContact.bind(this));
 
     dispatcher.on('changeTalk', this.changeTalk.bind(this));
+    dispatcher.on('closeErrorModal', this.closeErrorModal.bind(this));
     this.getContactList = this.getContactList.bind(this);
   }
 
@@ -152,6 +153,12 @@ export default class Store extends Emitter {
     firebase.auth().signInWithEmailAndPassword(userdata.mail, userdata.password_value).catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
+      const error_data = {
+        state : 'login',
+        errorCode : errorCode,
+        errorMessage : errorMessage
+      }
+      this.emit('ERROR', error_data);
     });
   }
   //  ---Login モーダル関係終わり---
@@ -173,30 +180,34 @@ export default class Store extends Emitter {
       // エラー処理
       var errorCode = error.code;
       var errorMessage = error.message;
-      console.log('can not sign in')
-      console.log(errorCode);
-      console.log(errorMessage);
+      const error_data = {
+        state : 'signup',
+        errorCode : errorCode,
+        errorMessage : errorMessage
+      }
+      this.emit('ERROR', error_data);
     }).then(() => {
       //  ユーザープロフィールに名前を追加
       let current_user = firebase.auth().currentUser;
-      current_user.updateProfile({
-        displayName: userdata.name
-      });
-      //  ユーザー情報をデータベースの/user下に記録(アップデート)
-      current_user = firebase.auth().currentUser;
-      const postData = {
-        user_uid : current_user.uid,
-        user_name : userdata.name
-      };
+      if(current_user){
+        current_user.updateProfile({
+          displayName: userdata.name
+        });
+        //  ユーザー情報をデータベースの/user下に記録(アップデート)
+        current_user = firebase.auth().currentUser;
+        const postData = {
+          user_uid : current_user.uid,
+          user_name : userdata.name
+        };
 
-      this.user_name = userdata.name;
+        this.user_name = userdata.name;
 
-      const path = 'users/' + current_user.uid;
-      const usersRef =  firebase.database().ref(path);
-      usersRef.update(postData);
-      this.emit('CHANGE_NAME');
+        const path = 'users/' + current_user.uid;
+        const usersRef =  firebase.database().ref(path);
+        usersRef.update(postData);
+        this.emit('CHANGE_NAME');
+      }
     });
-
     this.closeSignUpModal();
   }
 
@@ -338,5 +349,9 @@ export default class Store extends Emitter {
 
   getRoomUid() {
     return this.room_uid;
+  }
+
+  closeErrorModal() {
+    this.emit('CLOSE_ERROR_MODAL');
   }
 }

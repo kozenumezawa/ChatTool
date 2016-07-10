@@ -9,6 +9,7 @@ import { NavItem } from 'react-bootstrap'
 import LoginModal from './login-modal'
 import SignUpModal from './signup-modal'
 import AddContactModal from './addcontact-modal'
+import ErrorModal from './error-modal'
 
 export default class header extends React.Component {
   constructor(props) {
@@ -75,6 +76,7 @@ export default class header extends React.Component {
       //  ログイン中でない場合の処理
       return (
         <div>
+          <ErrorModal parent_state = { this.props.parent_state } />
           <LoginModal parent_state = { this.props.parent_state } />
           <SignUpModal parent_state = { this.props.parent_state } />
           <Navbar>

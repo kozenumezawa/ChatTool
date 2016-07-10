@@ -29,7 +29,6 @@ export default class login extends React.Component {
   _close() {
     this.props.parent_state.action.closeLoginModal();
     this.setState({
-      name: '',
       mail: '',
       password_value: ''
     });
@@ -38,12 +37,13 @@ export default class login extends React.Component {
   //  Googleアカウントでログインが押されたときの処理
   _loginByGoogle() {
     this.props.parent_state.action.loginByGoogle();
-    _close();
+    this._close();
   }
 
   _loginByMail() {
-    if(this.state.name != '' && this.state.mail != '' && this.state.password_value != ''){
+    if(this.state.mail != '' && this.state.password_value != ''){
       this.props.parent_state.action.loginByMail(this.state);
+      this._close();
     }
   }
   getPasswordState() {
