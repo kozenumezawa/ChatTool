@@ -44,14 +44,11 @@ export default class addcontact extends React.Component {
       this.render_users = [];
       nextProps.parent_state.searched_user.forEach((element, index) => {
         this.render_users.push(
-          <div>
-            <tr>
-              <td>{ element.user_name }</td>
-              <td>{ element.user_uid }</td>
-              <td>FW</td>
-              <Button onClick={this.addContact.bind(this, element)}> 追加 </Button>
-            </tr>
-          </div>
+          <tr>
+            <th>{ ' ' }</th>
+            <th>{ element.user_name }</th>
+            <Button onClick={this.addContact.bind(this, element)}> 追加 </Button>
+          </tr>
         );
       });
     }
@@ -59,6 +56,7 @@ export default class addcontact extends React.Component {
 
   addContact(user) {
     this.props.parent_state.action.addContact(user);
+    this._close();
   }
 
   render() {
@@ -83,9 +81,9 @@ export default class addcontact extends React.Component {
             <Table striped>
               <thead>
               <tr>
-                <th>Number</th>
+                <th>Icon</th>
                 <th>Name</th>
-                <th>Position</th>
+                <th></th>
               </tr>
               </thead>
               <tbody>

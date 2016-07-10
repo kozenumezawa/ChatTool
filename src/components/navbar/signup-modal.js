@@ -27,6 +27,11 @@ export default class signup extends React.Component {
   //  モーダルダイアログを閉じる処理
   _close() {
     this.props.parent_state.action.closeSignUpModal();
+    this.setState({
+      name: '',
+      mail: '',
+      password_value: ''
+    });
   }
 
   //  登録ボタンが押されたときの処理

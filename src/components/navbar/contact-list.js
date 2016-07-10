@@ -35,8 +35,11 @@ export default class ContactList extends React.Component {
   }
 
   changeTalk(index, user) {
-    this.setState({active_key : index });
-    this.props.parent_state.action.changeTalk(user);
+    //  連絡先の中から自分を押した時は無視する
+    if(this.state.active_key != index){
+      this.setState({active_key : index });
+      this.props.parent_state.action.changeTalk(user);
+    }
   }
 
   render() {

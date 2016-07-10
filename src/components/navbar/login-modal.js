@@ -28,6 +28,11 @@ export default class login extends React.Component {
   //  モーダルダイアログを閉じる処理
   _close() {
     this.props.parent_state.action.closeLoginModal();
+    this.setState({
+      name: '',
+      mail: '',
+      password_value: ''
+    });
   }
 
   //  Googleアカウントでログインが押されたときの処理

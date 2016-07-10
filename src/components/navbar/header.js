@@ -56,6 +56,7 @@ export default class header extends React.Component {
 
             <Navbar.Collapse>
               <Nav>
+                <NavItem  href="#" > ようこそ { this.props.parent_state.user_name } 様</NavItem>
                 <NavItem eventKey={1} href="#" onSelect={this._logout} > ログアウト</NavItem>
               </Nav>
 
