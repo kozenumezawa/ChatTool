@@ -69,3 +69,10 @@
 .friend:after {
     border-color: transparent #BCF5A9 transparent transparent;
 }
+
+.scroll-chat-field {
+    overflow:auto;
+    height:250px;
+    line-height:1.5;
+    padding:10px 0;
+}
