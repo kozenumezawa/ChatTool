@@ -17,6 +17,9 @@ export default class ContactList extends React.Component {
 
   //  検索によって得たユーザーデータに合わせて、表示するテーブルを変える
   componentWillReceiveProps(nextProps) {
+    if(nextProps.parent_state.logged_in == false) {
+      this.setState({active_key : 0 });
+    }
 
     if(nextProps.parent_state.contact_list != this.props.parent_state.contact_list){
       this.render_contact = [];

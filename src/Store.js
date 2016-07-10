@@ -107,6 +107,7 @@ export default class Store extends Emitter {
   getLoggedinInfo() {
     return this.user_loggedin;
   }
+  
   //  全メッセージの読み込みと、新規メッセージの読み込み
   loadMessages(data) {
     this.emit('UPDATE_MESSAGE', data.val())

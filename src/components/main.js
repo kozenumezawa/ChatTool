@@ -40,7 +40,7 @@ export default class main extends React.Component {
     });
 
     store.on('UPDATE_MESSAGE', (message) => {
-      this.setState({ message : message })
+      this.setState({ message : message });
     });
 
     store.on('CHANGE_LOGGEDIN_STATE', () => {
