@@ -27,6 +27,7 @@ export default class Store extends Emitter {
     this.find_user = [];
     this.room_path = '';
     this.room_uid = '';
+    this.user_name = '';
 
     //  ログイン状況を監視する関数をセット
     firebase.auth().onAuthStateChanged(this.changeLoggedinState.bind(this));
@@ -58,12 +59,18 @@ export default class Store extends Emitter {
     this.storage = firebase.storage();
   }
 
+  getUserName() {
+    return this.user_name;
+  }
+
   changeLoggedinState(user) {
     if (user) {
       // ユーザーログイン時の処理
       //  ユーザー情報をデータベースの/user下に記録(アップデート) sign up時の二重書き込みを防ぐためにif文を用いる
       const current_user = firebase.auth().currentUser;
       if(current_user.displayName != null) {
+        this.user_name = current_user.displayName;
+        this.emit('CHANGE_NAME');
         const postData = {
           user_uid : current_user.uid,
           user_name : current_user.displayName

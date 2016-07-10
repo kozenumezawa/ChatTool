@@ -28,6 +28,7 @@ export default class main extends React.Component {
       logged_in : store.getLoggedinInfo(),
       contact_list : store.getContactList(),
       room_uid : store.getRoomUid(),
+      user_name : store.getUserName(),
       message : ''
     };
 
@@ -68,6 +69,11 @@ export default class main extends React.Component {
       // this.setState({ contact_list : store.getContactList() });
       this.setState({ room_uid : store.getRoomUid() });
     });
+
+    store.on('CHANGE_NAME', () => {
+      // this.setState({ contact_list : store.getContactList() });
+      this.setState({ user_name : store.getUserName() });
+    });
   }
 
 
@@ -83,6 +89,7 @@ export default class main extends React.Component {
                                   contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
                                   room_uid : this.state.room_uid,
+                                  user_name : this.state.user_name,
                                   message : this.state.message
                                 } } />
         <Grid>
@@ -97,6 +104,7 @@ export default class main extends React.Component {
                                   contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
                                   room_uid : this.state.room_uid,
+                                  user_name : this.state.user_name,
                                   message : this.state.message
                                 } } />
             </Col>
@@ -110,6 +118,7 @@ export default class main extends React.Component {
                                   contact_list : this.state.contact_list,
                                   logged_in : this.state.logged_in,
                                   room_uid : this.state.room_uid,
+                                  user_name : this.state.user_name,
                                   message : this.state.message
                                 } } />
             </Col>

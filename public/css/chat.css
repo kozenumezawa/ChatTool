@@ -17,7 +17,30 @@
     width: 100%;
     float: right;
 }
-.chat-hukidashi {
+.hukidashi-me {
+    display: inline-block;
+    padding: 15px 20px;
+    margin-left: 400px;
+    margin-top: 8px;
+    border-radius: 10px;
+    position: relative;
+    background-color: #D9F0FF;
+}
+
+.hukidashi-me:after {
+    content: "";
+    position: absolute;
+    top: 50%; right: -10px;
+    margin-top: -10px;
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 10px 10px 10px 0px ;
+    border-color: transparent transparent #D9F0FF transparent ;
+}
+
+.hukidashi-friend {
     display: inline-block;
     padding: 15px 20px;
     margin-left: 120px;
@@ -27,7 +50,7 @@
     background-color: #D9F0FF;
 }
 
-.chat-hukidashi:after {
+.hukidashi-friend:after {
     content: "";
     position: absolute;
     top: 50%; left: -10px;
@@ -36,12 +59,13 @@
     width: 0px;
     height: 0px;
     border-style: solid;
-    border-width: 10px 10px 10px 0;
+    border-width: 10px 10px 0px 0;
     border-color: transparent #D9F0FF transparent transparent;
 }
-.someone {
+
+.friend {
     background-color: #BCF5A9;
 }
-.someone:after {
+.friend:after {
     border-color: transparent #BCF5A9 transparent transparent;
 }
