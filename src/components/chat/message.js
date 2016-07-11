@@ -5,7 +5,6 @@ export default class message extends React.Component {
     super(props)
 
     this.render_messages = [];
-    this.render_stack = [];
   }
 
   //  メッセージの追加(propsの更新)に合わせて、表示するメッセージを変更する
