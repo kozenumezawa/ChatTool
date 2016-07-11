@@ -23,6 +23,7 @@ export default class errormodal extends React.Component {
       this.error_message.push(
         <div>
           { '申し訳ございません。エラーが発生しました。' } <br/>
+          { 'エラー内容を確認し、再度入力してください。。' } <br/>
           { 'エラーコード: '}
           { nextProps.parent_state.error_data.errorCode }<br/>
           { 'エラーメッセージ: '}
@@ -37,7 +38,7 @@ export default class errormodal extends React.Component {
       <div>
         <Modal show={this.props.parent_state.show_error_modal} onHide={this._close}>
           <Modal.Header closeButton>
-            <Modal.Title>エラーが起きました</Modal.Title>
+            <Modal.Title>入力エラー</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

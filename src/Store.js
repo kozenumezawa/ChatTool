@@ -338,6 +338,11 @@ export default class Store extends Emitter {
   }
 
   changeTalk(user) {
+    if(this.room_path != ''){
+      //  以前のルームのデータの監視をやめる
+      this.commentsRef = firebase.database().ref(this.room_path);
+      this.commentsRef.off('child_added');
+    }
     this.room_uid = user.room_uid;  //  現在のルームの更新
     this.emit('CHANGE_ROOM');
 

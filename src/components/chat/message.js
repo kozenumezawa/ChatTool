@@ -36,8 +36,8 @@ export default class message extends React.Component {
       this.render_stack[i] = [];
     }
 
-    if(change_flag == false && nextProps.parent_state.message != this.props.parent_state.message){
-      //  発言主によってCSSを分ける
+    if(change_flag == false && nextProps.parent_state.message.body != this.props.parent_state.message.body){
+      //  発言主によってcssを分ける
       if(nextProps.parent_state.message.name == nextProps.parent_state.user_name) {
         this.render_messages.unshift(
           <div className="chat-area">
