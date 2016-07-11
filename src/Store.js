@@ -289,8 +289,17 @@ export default class Store extends Emitter {
     const friend_ref = firebase.database().ref(friend_path);
     friend_ref.update(friend_post_data).then(() => {
       this.emit('UPDATA_CONTACT');
-    });
+      //  ルームが一つもない時にコンタクトが追加された時は、そのパスを参照する
+      if(this.room_path != ''){
+        //  データベースの参照開始
+        this.room_path = 'rooms/' + room_uid + '/messages/';
+        this.commentsRef = firebase.database().ref(this.room_path);
+        this.commentsRef.on('child_added', this.loadMessages.bind(this));
+        this.room_uid = room_uid;  //  現在のルームの更新
+        this.emit('CHANGE_ROOM');
+      }
 
+    });
   }
 
   updateContactList() {
