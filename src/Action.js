@@ -70,4 +70,9 @@ export default class Action {
   closeErrorModal() {
     this.dispatcher.emit('closeErrorModal')
   }
+
+  updateContact() {
+    this.dispatcher.emit('updateContact');
+  }
+
 }

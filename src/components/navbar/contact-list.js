@@ -42,14 +42,22 @@ export default class ContactList extends React.Component {
     }
   }
 
+  //  ログイン中かどうかでrender()の内容を変える
   render() {
-    return (
-      <Nav bsStyle="pills" activeKey={ this.state.active_key } stacked>
-        <NavItem eventKey={ this.state.active_key } href="#">
-          連絡先リスト
-        </NavItem>
-        { this.render_contact }
-      </Nav>
-    );
+    if(this.props.parent_state.logged_in == true) {
+      return (
+        <Nav bsStyle="pills" activeKey={ this.state.active_key } stacked>
+          <NavItem eventKey={ this.state.active_key } href="#">
+            連絡先リスト
+          </NavItem>
+          { this.render_contact }
+        </Nav>
+      );
+    } else {
+      return(
+        <div>
+        </div>
+      );
+    }
   }
 }
