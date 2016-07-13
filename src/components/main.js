@@ -68,7 +68,6 @@ export default class main extends React.Component {
     });
 
     store.on('CHANGE_ROOM', () => {
-      // this.setState({ contact_list : store.getContactList() });
       this.setState({ room_uid : store.getRoomUid() });
     });
 

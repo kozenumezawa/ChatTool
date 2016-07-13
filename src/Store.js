@@ -14,9 +14,6 @@ export default class Store extends Emitter {
     };
     firebase.initializeApp(config);
 
-    // データベースの参照を準備
-    this.rootRef = firebase.database().ref();
-    this.initFirebase();
     this.contact_list = [];
 
     //  各stateの初期値設定f
@@ -55,11 +52,6 @@ export default class Store extends Emitter {
 
     dispatcher.on('updateContact', this.updateContactList.bind(this));
     this.getContactList = this.getContactList.bind(this);
-  }
-
-  initFirebase() {
-    this.database = firebase.database();
-    this.storage = firebase.storage();
   }
 
   getUserName() {
@@ -320,24 +312,6 @@ export default class Store extends Emitter {
   }
   //  ---連絡先を追加 モーダル関係終わり---
 
-  sendMessage(message) {
-    const postData = {
-      name: firebase.auth().currentUser.displayName,
-      body: message
-    }
-    if(postData.body != '' && this.room_path != '' ){
-      firebase.database().ref(this.room_path).push(postData);
-    }
-  }
-
-  logout() {
-    firebase.auth().signOut().then(() => {
-
-    }, (error) => {
-      //  ログインできなかったときの処理
-    });
-  }
-
   changeTalk(user) {
     if(this.room_path != ''){
       //  以前のルームのデータの監視をやめる
@@ -356,6 +330,26 @@ export default class Store extends Emitter {
   getRoomUid() {
     return this.room_uid;
   }
+
+
+  sendMessage(message) {
+    const postData = {
+      name: firebase.auth().currentUser.displayName,
+      body: message
+    }
+    if(postData.body != '' && this.room_path != '' ){
+      firebase.database().ref(this.room_path).push(postData);
+    }
+  }
+
+  logout() {
+    firebase.auth().signOut().then(() => {
+
+    }, (error) => {
+      //  ログインできなかったときの処理
+    });
+  }
+
 
   closeErrorModal() {
     this.emit('CLOSE_ERROR_MODAL');

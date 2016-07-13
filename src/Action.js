@@ -37,14 +37,6 @@ export default class Action {
   //  ---SignUp モーダル関係終わり---
 
 
-  logout() {
-    this.dispatcher.emit('logout')
-  }
-
-  sendMessage(message) {
-    this.dispatcher.emit('sendMessage', message)
-  }
-
   //  ---連絡先を追加 モーダル関係---
   openAddByNameModal() {
     this.dispatcher.emit('openAddByNameModal')
@@ -62,6 +54,15 @@ export default class Action {
     this.dispatcher.emit('addContact', user)
   }
   //  ---連絡先を追加 モーダル関係終わり---
+
+
+  logout() {
+    this.dispatcher.emit('logout')
+  }
+
+  sendMessage(message) {
+    this.dispatcher.emit('sendMessage', message)
+  }
 
   changeTalk(user) {
     this.dispatcher.emit('changeTalk', user)
