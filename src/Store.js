@@ -16,7 +16,7 @@ export default class Store extends Emitter {
 
     this.contact_list = [];
 
-    //  各stateの初期値設定f
+    //  各stateの初期値設定
     this.show_login_modal = false;
     this.show_sign_up_modal = false;
     this.user_loggedin = false;
@@ -210,6 +210,7 @@ export default class Store extends Emitter {
   }
   //  ---sign up モーダル関係終わり---
 
+
   //  ---連絡先を追加 モーダル関係---
   openAddByNameModal() {
     this.show_add_by_name_modal = true;
@@ -312,6 +313,17 @@ export default class Store extends Emitter {
   }
   //  ---連絡先を追加 モーダル関係終わり---
 
+  //  ---連絡先リスト 関係---
+  //  Firebase上の連絡先リストを監視し、連絡先が追加された時はイベントを発行する
+  monitorRoomList() {
+
+  }
+
+  stopMonitorRoomList() {
+
+  }
+
+  //違う連絡先がチャット相手として選択されたときの処理
   changeTalk(user) {
     if(this.room_path != ''){
       //  以前のルームのデータの監視をやめる
@@ -327,6 +339,7 @@ export default class Store extends Emitter {
     this.commentsRef.on('child_added', this.loadMessages.bind(this));
   }
 
+  /// ---連絡先リスト関係 終わり---
   getRoomUid() {
     return this.room_uid;
   }
@@ -349,7 +362,6 @@ export default class Store extends Emitter {
       //  ログインできなかったときの処理
     });
   }
-
 
   closeErrorModal() {
     this.emit('CLOSE_ERROR_MODAL');
