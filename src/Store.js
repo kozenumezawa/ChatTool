@@ -314,21 +314,17 @@ export default class Store extends Emitter {
   //  ---連絡先リスト 関係---
   //  カレントユーザーの連絡先リストを監視し、連絡先が追加された時はイベントを発行する
   monitorRoomList(current_user) {
-    console.log('start monitor');
     const path = 'users/' + current_user.uid + '/list/';
     this.listRef = firebase.database().ref(path);
     this.listRef.on('child_added', this.contactAdded.bind(this))
   }
 
   contactAdded() {
-    console.log('list added');
     this.updateContactList();
   }
 
   stopMonitorRoomList() {
-    console.log('stop monitor');
     if(typeof(this.listRef) != 'undefined') {
-      console.log('stop monitor!!!!')
       this.listRef.off('child_added');
     }
   }
