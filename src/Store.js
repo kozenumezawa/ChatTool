@@ -50,7 +50,6 @@ export default class Store extends Emitter {
     dispatcher.on('changeTalk', this.changeTalk.bind(this));
     dispatcher.on('closeErrorModal', this.closeErrorModal.bind(this));
 
-    dispatcher.on('updateContact', this.updateContactList.bind(this));
     this.getContactList = this.getContactList.bind(this);
   }
 
@@ -324,7 +323,6 @@ export default class Store extends Emitter {
   contactAdded() {
     console.log('list added');
     this.updateContactList();
-
   }
 
   stopMonitorRoomList() {

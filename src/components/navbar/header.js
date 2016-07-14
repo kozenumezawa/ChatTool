@@ -18,7 +18,6 @@ export default class header extends React.Component {
     this._openSignUpModal = this._openSignUpModal.bind(this);
     this._logout = this._logout.bind(this);
     this._openAddByNameModal = this._openAddByNameModal.bind(this);
-    this._updateContact = this._updateContact.bind(this);
   }
 
   //  ログインが押されたときの処理
@@ -40,11 +39,7 @@ export default class header extends React.Component {
   _openAddByNameModal() {
     this.props.parent_state.action.openAddByNameModal();
   }
-
-  _updateContact() {
-    this.props.parent_state.action.updateContact();
-  }
-
+  
   //  ログイン中かどうかでrender()の内容を変える
   render() {
     if(this.props.parent_state.logged_in == true) {
@@ -63,7 +58,6 @@ export default class header extends React.Component {
             <Navbar.Collapse>
               <Nav>
                 <NavItem  href="#" > ようこそ { this.props.parent_state.user_name } 様</NavItem>
-                <NavItem eventKey={2} href="#" onSelect={this._updateContact} > 連絡先リストを更新</NavItem>
                 <NavItem eventKey={1} href="#" onSelect={this._logout} > ログアウト</NavItem>
               </Nav>
 
