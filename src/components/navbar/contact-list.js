@@ -23,7 +23,6 @@ export default class ContactList extends React.Component {
 
     if(nextProps.parent_state.contact_list != this.props.parent_state.contact_list){
       this.render_contact = [];
-
       nextProps.parent_state.contact_list.forEach((element, index) => {
         this.render_contact.push(
           <NavItem eventKey={ index } onClick={this.changeTalk.bind(this, index, element)} href="#">

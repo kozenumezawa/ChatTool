@@ -61,8 +61,10 @@ export default class Store extends Emitter {
   changeLoggedinState(user) {
     if (user) {
       // ユーザーログイン時の処理
-      //  ユーザー情報をデータベースの/user下に記録(アップデート) sign up時の二重書き込みを防ぐためにif文を用いる
-      const current_user = firebase.auth().currentUser;
+      const current_user = user;
+
+      //  ユーザー情報をデータベースの/user下に記録 (アップデート)。
+      // Google認証を用いた場合は、デフォルトでユーザー名が 所得できるので、そのユーザー名を記録
       if(current_user.displayName != null) {
         this.user_name = current_user.displayName;
         this.emit('CHANGE_NAME');
@@ -74,6 +76,9 @@ export default class Store extends Emitter {
         const usersRef =  firebase.database().ref(path);
         usersRef.update(postData);
 
+        //  連絡先リストの監視を開始
+        this.monitorRoomList(current_user);
+
         //  連絡先があるか検索し、ある場合、連絡先の一番上の人のチャットメッセージを所得
         firebase.database().ref('users/' + current_user.uid + '/list/').once('value').then( (snapshot) => {
           const my_uid = firebase.auth().currentUser.uid;
@@ -82,28 +87,20 @@ export default class Store extends Emitter {
             const user = users[element];  //  ユーザー情報を所得
             if(index == 0) {
               //  データベースの参照開始
-              this.room_path = 'rooms/' + user.room_uid + '/messages/';
-              this.commentsRef = firebase.database().ref(this.room_path);
-              this.commentsRef.on('child_added', this.loadMessages.bind(this));
-              this.room_uid = user.room_uid;  //  現在のルームの更新
-              this.emit('CHANGE_ROOM');
+              this.changeTalk(user);
             }
           });
         });
       }
-
       this.user_loggedin = true;
-
-      this.emit('UPDATA_CONTACT');
     } else {
-      // this.commentsRef.off('child_added', this.loadMessages.bind(this));
       this.user_loggedin = false;
       this.contact_list = [];
 
+      this.stopMonitorRoomList();
       this.emit('GET_CONTACT');
     }
     this.emit('CHANGE_LOGGEDIN_STATE')
-
   }
 
   getLoggedinInfo() {
@@ -186,20 +183,23 @@ export default class Store extends Emitter {
       if(current_user){
         current_user.updateProfile({
           displayName: userdata.name
+        }).then(() => {
+          //  displayName更新後に、ユーザー情報をデータベースの/user下に記録(アップデート)
+          current_user = firebase.auth().currentUser;
+          const postData = {
+            user_uid : current_user.uid,
+            user_name : userdata.name
+          };
+
+          this.user_name = userdata.name;
+
+          const path = 'users/' + current_user.uid;
+          const usersRef =  firebase.database().ref(path);
+          usersRef.update(postData);
+          this.emit('CHANGE_NAME');
+
+          this.changeLoggedinState(current_user); //  displayNameが更新された後に、明示的に呼び出し更新する
         });
-        //  ユーザー情報をデータベースの/user下に記録(アップデート)
-        current_user = firebase.auth().currentUser;
-        const postData = {
-          user_uid : current_user.uid,
-          user_name : userdata.name
-        };
-
-        this.user_name = userdata.name;
-
-        const path = 'users/' + current_user.uid;
-        const usersRef =  firebase.database().ref(path);
-        usersRef.update(postData);
-        this.emit('CHANGE_NAME');
       }
     });
     this.closeSignUpModal();
@@ -280,9 +280,7 @@ export default class Store extends Emitter {
     }
     const friend_path = 'users/' + friend_uid + '/list/' + my_uid;
     const friend_ref = firebase.database().ref(friend_path);
-    friend_ref.update(friend_post_data).then(() => {
-      this.emit('UPDATA_CONTACT');
-    });
+    friend_ref.update(friend_post_data);
   }
 
   updateContactList() {
@@ -295,6 +293,7 @@ export default class Store extends Emitter {
       const my_uid = current_user.uid;
       const contact_path = 'users/' + my_uid + '/list/';
       firebase.database().ref(contact_path).once('value').then( (snapshot) => {
+        this.contact_list = [];
         const users = snapshot.val();
         Object.keys(users).forEach( (element, index) => {
           const friend_user = users[element];  //  フレンドリストを所得
@@ -314,16 +313,30 @@ export default class Store extends Emitter {
   //  ---連絡先を追加 モーダル関係終わり---
 
   //  ---連絡先リスト 関係---
-  //  Firebase上の連絡先リストを監視し、連絡先が追加された時はイベントを発行する
-  monitorRoomList() {
+  //  カレントユーザーの連絡先リストを監視し、連絡先が追加された時はイベントを発行する
+  monitorRoomList(current_user) {
+    console.log('start monitor');
+    const path = 'users/' + current_user.uid + '/list/';
+    this.listRef = firebase.database().ref(path);
+    this.listRef.on('child_added', this.contactAdded.bind(this))
+  }
+
+  contactAdded() {
+    console.log('list added');
+    this.updateContactList();
 
   }
 
   stopMonitorRoomList() {
-
+    console.log('stop monitor');
+    if(typeof(this.listRef) != 'undefined') {
+      console.log('stop monitor!!!!')
+      this.listRef.off('child_added');
+    }
   }
+  //  ---連絡先リスト 関係終わり---
 
-  //違う連絡先がチャット相手として選択されたときの処理
+  //  チャット相手を更新する処理
   changeTalk(user) {
     if(this.room_path != ''){
       //  以前のルームのデータの監視をやめる

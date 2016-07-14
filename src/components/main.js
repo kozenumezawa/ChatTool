@@ -58,11 +58,6 @@ export default class main extends React.Component {
       this.setState({ searched_user: data })
     });
 
-    store.on('UPDATA_CONTACT', () => {
-      //  updateContactList内で 'GET_CONTACT'が発行され、contact_listが更新される
-      store.updateContactList();
-    });
-
     store.on('GET_CONTACT', () => {
       this.setState({ contact_list : store.getContactList() });
     });
