@@ -282,7 +282,20 @@ export default class Store extends Emitter {
     friend_ref.update(friend_post_data);
   }
 
-  updateContactList() {
+  getContactList() {
+    return this.contact_list;
+  }
+  //  ---連絡先を追加 モーダル関係終わり---
+
+  //  ---連絡先リスト 関係---
+  //  カレントユーザーの連絡先リストを監視し、連絡先が追加された時はイベントを発行する
+  monitorRoomList(current_user) {
+    const path = 'users/' + current_user.uid + '/list/';
+    this.listRef = firebase.database().ref(path);
+    this.listRef.on('child_added', this.contactAdded.bind(this))
+  }
+
+  contactAdded() {
     const current_user = firebase.auth().currentUser;
     this.contact_list = [];
 
@@ -300,27 +313,21 @@ export default class Store extends Emitter {
         });
       }).then(() => {
         this.emit('GET_CONTACT');
-      })
+
+        //  チャット相手がいないとき、追加された相手をチャット相手に自動選択する
+        if(this.room_path == ''){
+          firebase.database().ref('users/' + current_user.uid + '/list/').once('value').then( (snapshot) => {
+            const users = snapshot.val();
+            Object.keys(users).forEach( (element, index) => {
+              const user = users[element];  //  ユーザー情報を所得
+              this.changeTalk(user);        //  データベースの参照開始
+            });
+          });
+        }
+      });
     } else {
       this.emit('GET_CONTACT');
     }
-  }
-
-  getContactList() {
-    return this.contact_list;
-  }
-  //  ---連絡先を追加 モーダル関係終わり---
-
-  //  ---連絡先リスト 関係---
-  //  カレントユーザーの連絡先リストを監視し、連絡先が追加された時はイベントを発行する
-  monitorRoomList(current_user) {
-    const path = 'users/' + current_user.uid + '/list/';
-    this.listRef = firebase.database().ref(path);
-    this.listRef.on('child_added', this.contactAdded.bind(this))
-  }
-
-  contactAdded() {
-    this.updateContactList();
   }
 
   stopMonitorRoomList() {
