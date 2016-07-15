@@ -39,9 +39,23 @@ export default class MessageForm extends React.Component {
         <form>
           <FormGroup controlId="formControlsTextarea">
             <FormControl value={this.state.textAreaValue} onChange={this.onChangeText} componentClass="textarea" placeholder="メッセージを入力..." />
-            <Button onClick={this.onClick}>
-              送信
-            </Button>
+
+            <div className="pull-right">
+              <Button onClick={this.onClick}>
+                送信
+              </Button>
+            </div>
+
+            <br/>
+            <br/>
+
+            <div className="pull-right">
+              <input id="unshownMedia" type="file" accept="image/*,capture=camera"></input>
+              <Button className="glyphicon glyphicon-plus" >
+                写真を送信
+              </Button>
+            </div>
+
           </FormGroup>
         </form>
       </div>

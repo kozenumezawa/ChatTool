@@ -358,7 +358,6 @@ export default class Store extends Emitter {
     return this.room_uid;
   }
 
-
   sendMessage(message) {
     const postData = {
       name: firebase.auth().currentUser.displayName,

@@ -76,3 +76,14 @@
     line-height:1.5;
     padding:10px 0;
 }
+
+#unshownMedia {
+    display: none;
+}
+
+#image-form {
+    display: flex;
+    flex-direction: row;
+    width: 48px;
+    float: right;
+}
