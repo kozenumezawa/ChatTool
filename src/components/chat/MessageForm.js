@@ -4,6 +4,8 @@ import { FormGroup } from 'react-bootstrap'
 import { FormControl } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 
+import $ from 'jquery'
+
 export default class MessageForm extends React.Component {
   constructor(props) {
     super(props);
@@ -14,6 +16,8 @@ export default class MessageForm extends React.Component {
 
     this.onChangeText = this.onChangeText.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onClickSendPicture = this.onClickSendPicture.bind(this);
+
   }
 
   onChangeText(event) {
@@ -33,6 +37,11 @@ export default class MessageForm extends React.Component {
     }
   }
 
+  //写真を送信ボタンが押されたときの処理
+  onClickSendPicture() {
+    $('#mediaCapture').click();
+  }
+
   render() {
     return (
       <div>
@@ -50,8 +59,8 @@ export default class MessageForm extends React.Component {
             <br/>
 
             <div className="pull-right">
-              <input id="unshownMedia" type="file" accept="image/*,capture=camera"></input>
-              <Button className="glyphicon glyphicon-plus" >
+              <input id="mediaCapture" type="file" accept="image/*,capture=camera"></input>
+              <Button onClick={this.onClickSendPicture} className="glyphicon glyphicon-plus" >
                 写真を送信
               </Button>
             </div>

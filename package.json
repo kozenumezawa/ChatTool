@@ -18,6 +18,7 @@
   "homepage": "https://github.com/kozenumezawa/ChatTool#readme",
   "dependencies": {
     "firebase": "^3.1.0",
+    "jquery": "^3.1.0",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.5",
     "react-dom": "^15.1.0"
