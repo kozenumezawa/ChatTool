@@ -17,7 +17,9 @@ export default class MessageForm extends React.Component {
     this.onChangeText = this.onChangeText.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onClickSendPicture = this.onClickSendPicture.bind(this);
+    this.saveImage = this.saveImage.bind(this);
 
+    this.imageForm = document.getElementById('image-form');
   }
 
   onChangeText(event) {
@@ -37,9 +39,25 @@ export default class MessageForm extends React.Component {
     }
   }
 
-  //写真を送信ボタンが押されたときの処理
+  //  写真を送信ボタンが押されたときの処理
   onClickSendPicture() {
     $('#mediaCapture').click();
+  }
+
+  //  選択された写真をアップロードする処理
+  saveImage(event) {
+    var file = event.target.files[0];
+
+    // ファイルを選択した履歴をフォームから削除する
+    const imageForm = document.getElementById('image-form');
+    imageForm.reset();
+
+    // 選択されたファイルがイメージファイルが調べる
+    if (!file.type.match('image.*')) {
+      console.log('not a image file')
+      return;
+    }
+    console.log(file);
   }
 
   render() {
@@ -59,14 +77,19 @@ export default class MessageForm extends React.Component {
             <br/>
 
             <div className="pull-right">
-              <input id="mediaCapture" type="file" accept="image/*,capture=camera"></input>
               <Button onClick={this.onClickSendPicture} className="glyphicon glyphicon-plus" >
                 写真を送信
               </Button>
             </div>
-
           </FormGroup>
         </form>
+
+        <form id="image-form" action="#">
+          <FormGroup>
+            <input id="mediaCapture" onChange={this.saveImage} type="file" accept="image/*"></input>
+          </FormGroup>
+      </form>
+
       </div>
     );
   }
