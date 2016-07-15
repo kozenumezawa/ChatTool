@@ -64,6 +64,10 @@ export default class Action {
     this.dispatcher.emit('sendMessage', message)
   }
 
+  sendImage(file) {
+    this.dispatcher.emit('sendImage', file)
+  }
+
   changeTalk(user) {
     this.dispatcher.emit('changeTalk', user)
   }
@@ -71,4 +75,6 @@ export default class Action {
   closeErrorModal() {
     this.dispatcher.emit('closeErrorModal')
   }
+  
+  
 }

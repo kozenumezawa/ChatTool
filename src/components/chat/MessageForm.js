@@ -46,7 +46,7 @@ export default class MessageForm extends React.Component {
 
   //  選択された写真をアップロードする処理
   saveImage(event) {
-    var file = event.target.files[0];
+    const file = event.target.files[0];
 
     // ファイルを選択した履歴をフォームから削除する
     const imageForm = document.getElementById('image-form');
@@ -57,7 +57,8 @@ export default class MessageForm extends React.Component {
       console.log('not a image file')
       return;
     }
-    console.log(file);
+
+    this.props.parent_state.action.sendImage(file);
   }
 
   render() {

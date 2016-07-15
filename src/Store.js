@@ -35,6 +35,7 @@ export default class Store extends Emitter {
     dispatcher.on('loginByMail', this.loginByMail.bind(this));
 
     dispatcher.on('sendMessage', this.sendMessage.bind(this));
+    dispatcher.on('sendImage', this.sendImage.bind(this));
 
     dispatcher.on('showSignUpModal', this.showSignUpModal.bind(this));
     dispatcher.on('closeSignUpModal', this.closeSignUpModal.bind(this));
@@ -365,6 +366,43 @@ export default class Store extends Emitter {
     }
     if(postData.body != '' && this.room_path != '' ){
       firebase.database().ref(this.room_path).push(postData);
+    }
+  }
+
+  sendImage(file) {
+    if(this.room_path != '') {
+      var storageRef = firebase.storage().ref();
+
+      //  ファイルのメタデータを作成
+      const metadata = {
+        contentType: 'image'
+      };
+
+      // ファイルを指定したパスにアップロード
+      const upload_path = 'images/' + this.room_uid + '/' + Date.now() + file.name;
+      const uploadTask = storageRef.child(upload_path).put(file, metadata);
+
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        }, (error) => {
+          console.log(error.code);
+        }, () => {
+          // Upload completed successfully, now we can get the download URL
+          var downloadURL = uploadTask.snapshot.downloadURL;
+        }
+      );
     }
   }
 
