@@ -1,5 +1,7 @@
 import React from 'react'
 
+import $ from 'jquery'
+
 export default class message extends React.Component {
   constructor(props) {
     super(props)
@@ -17,7 +19,7 @@ export default class message extends React.Component {
     if(nextProps.parent_state.message != this.props.parent_state.message){
       //  発言主によってcssを分ける
       if(nextProps.parent_state.message.name == nextProps.parent_state.user_name) {
-        this.render_messages.unshift(
+        this.render_messages.push(
           <div className="chat-area">
             <div className="hukidashi-me">
               {nextProps.parent_state.message.body}
@@ -25,7 +27,7 @@ export default class message extends React.Component {
           </div>
         );
       } else {
-        this.render_messages.unshift(
+        this.render_messages.push(
           <div className="chat-area">
             <div className="hukidashi-friend friend">
               {nextProps.parent_state.message.body}
@@ -34,6 +36,7 @@ export default class message extends React.Component {
         );
       }
 
+      $('#message_window').animate({scrollTop: $('#message_window')[0].scrollHeight}, 'fast');  //  一番下までスクロールする
     }
   }
   
