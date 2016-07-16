@@ -408,7 +408,10 @@ export default class Store extends Emitter {
 
   logout() {
     firebase.auth().signOut().then(() => {
-
+      //  ログアウト成功時、各stateを初期化
+      this.room_path = '';
+      this.room_uid = '';
+      this.user_name = '';
     }, (error) => {
       //  ログインできなかったときの処理
     });
