@@ -1,5 +1,9 @@
 import React from 'react'
 
+import { Image } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
+import { Row }  from 'react-bootstrap'
+
 import $ from 'jquery'
 
 export default class message extends React.Component {
@@ -17,23 +21,51 @@ export default class message extends React.Component {
     }
 
     if(nextProps.parent_state.message != this.props.parent_state.message){
+      const message = nextProps.parent_state.message;
+
       //  発言主によってcssを分ける
-      if(nextProps.parent_state.message.name == nextProps.parent_state.user_name) {
-        this.render_messages.push(
-          <div className="chat-area">
-            <div className="hukidashi-me">
-              {nextProps.parent_state.message.body}
+      if(message.name == nextProps.parent_state.user_name) {
+        //  メッセージか画像かによって処理を分ける
+        if (message.body != '') {
+          this.render_messages.push(
+            <div className="chat-area">
+              <div className="hukidashi-me">
+                {message.body}
+              </div>
             </div>
-          </div>
-        );
+          );
+        } else if(message.imageURL != '') {
+          this.render_messages.push(
+            <div className="chat-area">
+              <Row>
+                <Col xs={4} xsOffset={6}>
+                  <Image src={message.imageURL} responsive />
+                </Col>
+              </Row>
+            </div>
+          );
+        }
       } else {
-        this.render_messages.push(
-          <div className="chat-area">
-            <div className="hukidashi-friend friend">
-              {nextProps.parent_state.message.body}
+        //  メッセージか画像かによって処理を分ける
+        if (message.body != '') {
+          this.render_messages.push(
+            <div className="chat-area">
+              <div className="hukidashi-friend friend">
+                {message.body}
+              </div>
             </div>
-          </div>
-        );
+          );
+        } else if (message.imageURL != '') {
+          this.render_messages.push(
+            <div className="chat-area">
+              <Row>
+                <Col xs={4} >
+                  <Image src={message.imageURL} responsive />
+                </Col>
+              </Row>
+            </div>
+          );
+        }
       }
 
       $('#message_window').animate({scrollTop: $('#message_window')[0].scrollHeight}, 'fast');  //  一番下までスクロールする

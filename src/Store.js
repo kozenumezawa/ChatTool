@@ -362,7 +362,8 @@ export default class Store extends Emitter {
   sendMessage(message) {
     const postData = {
       name: firebase.auth().currentUser.displayName,
-      body: message
+      body: message,
+      image: ''
     }
     if(postData.body != '' && this.room_path != '' ){
       firebase.database().ref(this.room_path).push(postData);
@@ -382,10 +383,9 @@ export default class Store extends Emitter {
       const upload_path = 'images/' + this.room_uid + '/' + Date.now() + file.name;
       const uploadTask = storageRef.child(upload_path).put(file, metadata);
 
-      // Listen for state changes, errors, and completion of the upload.
-      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+      //  ファイルをアップロードする処理
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
@@ -399,8 +399,17 @@ export default class Store extends Emitter {
         }, (error) => {
           console.log(error.code);
         }, () => {
-          // Upload completed successfully, now we can get the download URL
-          var downloadURL = uploadTask.snapshot.downloadURL;
+          const downloadURL = uploadTask.snapshot.downloadURL;
+
+          //  ダウンロードURLをデータベースに記録
+          const postData = {
+            name: firebase.auth().currentUser.displayName,
+            body: '',
+            imageURL: downloadURL
+          }
+          if(this.room_path != '' ){
+            firebase.database().ref(this.room_path).push(postData);
+          }
         }
       );
     }
